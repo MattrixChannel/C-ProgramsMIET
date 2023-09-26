@@ -86,5 +86,15 @@ namespace ConsoleApp1
         {
             return !pers1.Equal(pers2);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public object DeepCopy()
+        {
+            return new Person(name, surname, birthday);
+        }
     }
 }

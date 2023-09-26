@@ -19,11 +19,13 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             Person a = new Person("Peter", "Brasl", DateTime.Now);
-            Person b = new Person();
+            Person b = a.DeepCopy() as Person;
             Person c = b;
-            Console.WriteLine(a.Equals(b));
-            Console.WriteLine(a.Equals(c));
-            Console.WriteLine(b.Equals(c));
+            Console.WriteLine(a.ToString());
+            Console.WriteLine(b.ToString());
+            //Console.WriteLine(b.GetHashCode());
+            //Console.WriteLine(c.GetHashCode());
+
         }
     }
 }
