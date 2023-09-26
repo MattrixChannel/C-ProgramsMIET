@@ -28,7 +28,6 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine(a2.ToString());
             Console.WriteLine();
-            a2.education = Education.SecondEducation;
             Console.WriteLine(stud.GetHashCode());
             Console.WriteLine(a2.GetHashCode());
         }
