@@ -46,7 +46,7 @@ namespace ConsoleApp1
                 for (int i = 0; i < _exam.Length; i++)
                 {
                     marksCount++;
-                    marksSum += exam[i].Mark;
+                    marksSum += exam[i].mark;
                 }
                 return marksSum / marksCount;
             }
@@ -62,7 +62,7 @@ namespace ConsoleApp1
 
         public void AddExams( params Exam[] exams)
         {
-            if (exam[0].Name == "Example")
+            if (exam[0].name == "Example")
             {
                 Array.Resize(ref _exam, exams.Length);
             }
@@ -87,6 +87,54 @@ namespace ConsoleApp1
         public virtual string ToShortString()
         {
             return $"{person.ToString()}\n{education}\n{group}\n{avrMark}";
+        }
+        public override bool Equals(object obj)
+        {
+            return Equal(obj as Student);
+        }
+
+        private bool Equal(Student stud)
+        {
+            if (person != stud.person || education != stud.education || group != stud.group || exam.Length != stud.exam.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < exam.Length; i++)
+            {
+                if (exam[i] != stud.exam[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator ==(Student stud1, Student stud2)
+        {
+            return stud1.Equal(stud2);
+        }
+
+        public static bool operator !=(Student ex1, Student ex2)
+        {
+            return !ex1.Equal(ex2);
+        }
+
+        public override int GetHashCode()
+        {
+            int res = person.GetHashCode() + group.GetHashCode() + education.GetHashCode();
+            for (int i = 0;i < exam.Length; i++)
+            {
+                res += exam[i].GetHashCode();
+            }
+            return res;
+        }
+
+        public object DeepCopy()
+        {
+            Student newStud = new Student(person, education, group);
+            newStud.AddExams(exam);
+            return newStud;
         }
     }
 }
