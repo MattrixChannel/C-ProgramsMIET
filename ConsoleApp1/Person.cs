@@ -89,7 +89,7 @@ namespace ConsoleApp1
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return name.GetHashCode() + surname.GetHashCode() + birthday.GetHashCode();
         }
 
         public object DeepCopy()

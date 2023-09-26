@@ -20,11 +20,12 @@ namespace ConsoleApp1
         {
             Person a = new Person("Peter", "Brasl", DateTime.Now);
             Person b = a.DeepCopy() as Person;
-            Person c = b;
+            Person c = new Person();
             Console.WriteLine(a.ToString());
             Console.WriteLine(b.ToString());
-            //Console.WriteLine(b.GetHashCode());
-            //Console.WriteLine(c.GetHashCode());
+            Console.WriteLine(a.GetHashCode());
+            Console.WriteLine(b.GetHashCode());
+            Console.WriteLine(c.GetHashCode());
 
         }
     }
