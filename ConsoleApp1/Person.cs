@@ -23,7 +23,7 @@ namespace ConsoleApp1
         {
             _name = "Ivan";
             _surName = "Ivanov";
-            _birthday = System.DateTime.Today;
+            _birthday = DateTime.Today;
         }
 
         public string name
@@ -68,17 +68,23 @@ namespace ConsoleApp1
         
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            return Equal(obj as Person);
+        }
+
+        private bool Equal(Person pers)
+        {
+            if (name == pers.name && surname == pers.surname && birthday == pers.birthday) { return true; }
+            return false;
         }
 
         public static bool operator ==(Person pers1, Person pers2)
         {
-            return true;
+            return pers1.Equal(pers2);
         }
 
         public static bool operator !=(Person pers1, Person pers2)
         {
-            return true;
+            return !pers1.Equal(pers2);
         }
     }
 }
