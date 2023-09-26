@@ -65,7 +65,7 @@ namespace ConsoleApp1
         {
             return $"{_name} {_surName} {_birthday}";
         }
-        /*
+        
         public override bool Equals(object obj)
         {
             return base.Equals(obj);
@@ -79,6 +79,6 @@ namespace ConsoleApp1
         public static bool operator !=(Person pers1, Person pers2)
         {
             return true;
-        }*/
+        }
     }
 }
