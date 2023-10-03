@@ -19,15 +19,16 @@ public:
 	static int longestSurname;
 	
 	int getId() { return id; };
+	void setId(int num) { id = num; };
 	char* getSurname() { return surname; };
 	char* getName() { return name; };
 
 	Bank() {
 		id = count+1;
 		name = new char[MAXNAMELEN];
-		strcpy_s(name, 2, " ");
+		strcpy_s(name, 12, "DefaultName");
 		surname = new char[MAXNAMELEN];
-		strcpy_s(surname, 2, " ");
+		strcpy_s(surname, 15, "DefaultSurname");
 		sum = 0;
 		count++;
 	}
@@ -35,6 +36,7 @@ public:
 	~Bank() {
 		delete[] name;
 		delete[] surname;
+		count--;
 	}
 
 	void defineBankManual() {
@@ -56,20 +58,24 @@ public:
 
 		cout << "Deposit: ";
 		cin >> sum;
+		
 	}
 
 	void defineBankAuto(char* _name, char* _surname, double _sum) {
-		strcpy_s(surname, strlen(_surname) + 1, surname);
+		strcpy_s(surname, strlen(_surname) + 1, _surname);
 
-		if (strlen(_surname) > longestSurname) longestSurname = strlen(_surname);
+		if (strlen(_surname) > longestSurname) {
+		longestSurname = strlen(_surname);
+		}
 
-		strcpy_s(name, strlen(_name) + 1, name);
+		strcpy_s(name, strlen(_name) + 1, _name);
 
-		if (strlen(_name) > longestName) longestName = strlen(_name);
+		if (strlen(_name) > longestName) {
+			longestName = strlen(_name);
+		}
 
 		sum = _sum;
-		id = count + 1;
-		count++;
+		id = count;
 	}
 };
 
@@ -95,20 +101,42 @@ void dbInfo(Bank* db) {
 	Bank* u = db;
 	cout << "ID" << setw(Bank::longestSurname) << "Surname" << setw(Bank::longestName) << "Name" << ' ' << "Debt" << endl;
 	cout << "---------------------------------------------\n\n";
-	for (int i = 0; i < Bank().count; i++) {
-		cout << setw(2) << u->getId() << setw(Bank::longestSurname) << u->getSurname() << setw(Bank::longestName) << u->getName() << ' ' << u->sum << '\n';
+	for (int i = 0; i < Bank::count; i++) {
+		cout << setw(2) << u->getId() << setw(Bank::longestSurname + 1) << u->getSurname() << setw(Bank::longestName + 1) << u->getName() << ' ' << u->sum << '\n';
 		u++;
 	}
 }
 
-void getBankInfo(Bank bnk) {
-	cout << "\nId:\t" << bnk.getId() << endl;
+void getBankInfo(Bank* bnk) {
+	cout << "\n" << setw(9) << "Id: " << bnk->getId() << endl;
 
-	cout << "Surname:\t" << bnk.getSurname() << endl;
+	cout << setw(9) << "Surname: " << bnk->getSurname() << endl;
 
-	cout << "Name:\t" << bnk.getName() << endl;
+	cout << setw(9) << "Name: " << bnk->getName() << endl;
 
-	cout << "Deposit:\t" << bnk.sum << endl << endl;
+	cout << setw(9) << "Deposit: " << bnk->sum << endl << endl;
+}
+
+void cpyDB(Bank* Don, Bank* Rec, int size) {
+	for (int i = 0; i < size; i++) {
+		Rec[i].defineBankAuto(Don[i].getName(), Don[i].getSurname(), Don[i].sum);
+		Rec[i].setId(i + 1);
+	}
+	Rec[size].setId(size + 1);
+}
+
+void expandDb(Bank* db) {
+	int size = Bank::count;
+
+	Bank* newDb = new Bank[size + 1];
+
+	for (int i = 0; i < size; i++) {
+		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
+		newDb[i].setId(i + 1);
+	}
+
+	delete[] db;
+	db = newDb;
 }
 
 void motd() {
@@ -123,19 +151,18 @@ void motd() {
 }
 
 void main() {
-	Bank* db = (Bank*)calloc(1, sizeof(Bank));
-	FILE* dbFile;
-	int dbLen = 0;
-	fopen_s(&dbFile, DBNAME, "a+");
 
+	Bank* db = new Bank[1];
+	FILE* dbFile;
+	fopen_s(&dbFile, DBNAME, "a+");
+	//cout << Bank::count;
+	int size3;
+	Bank* newBank3;
+
+	//cout << Bank::count;
 	int except = 0;
 
-	int longestName = 4;
-	int longestSurname = 7;
-
 	for (int i = 0; !feof(dbFile); i++) {
-		dbLen++;
-		db = (Bank*)realloc(db, dbLen * sizeof(Bank));
 
 		char bufName[MAXNAMELEN];
 		char bufSurname[MAXNAMELEN];
@@ -157,6 +184,16 @@ void main() {
 
 		fscanf_s(dbFile, "%lf", &(bufSum));
 
+		if (i != 0) {
+			
+			int size = Bank::count;
+			Bank* newBank = new Bank[size + 1];
+			cpyDB(db, newBank, size);
+			delete[] db;
+			db = newBank;
+			//expandDb(db);
+		}
+
 		db[i].defineBankAuto(bufName, bufSurname, bufSum);
 	}
 	fclose(dbFile);
@@ -170,7 +207,6 @@ void main() {
 
 		bool found4 = false;
 		double sum5 = 0;
-		Bank newBank4;
 
 		int id4 = -1;
 
@@ -180,33 +216,34 @@ void main() {
 
 			fopen_s(&dbFile, DBNAME, "w");
 
-			for (int i = 0; i < dbLen; i++)
+			for (int i = 0; i < Bank::count; i++)
 			{
-				fprintf(dbFile, "%ld ", (db[i].getId()));
 				fprintf(dbFile, "%s ", db[i].getSurname(), MAXNAMELEN);// Было 15 вместо maxnamelen
 				fprintf(dbFile, "%s ", db[i].getName(), MAXNAMELEN);
 				fprintf(dbFile, "%lf", (db[i].sum));
-				if (i != dbLen - 1) fprintf(dbFile, "\n");
+				if (i != Bank::count - 1) fprintf(dbFile, "\n");
 			}
 			fclose(dbFile);
 			break;
 		case '2':
-			dbInfo(db, dbLen, longestName, longestSurname);
+			dbInfo(db);
 			break;
 		case '3':
-			dbLen++;
-			db = (Bank*)realloc(db, dbLen * sizeof(Bank));
-
-			
+			//cout << Bank::count;
+			size3 = Bank::count;
+			newBank3 = new Bank[size3 + 1];
+			cpyDB(db, newBank3, size3);
+			delete[] db;
+			db = newBank3;
 
 			cout << endl;
 
-			newBank.defineBankManual();
+			//cout << Bank::count << ' ' << db[0].getName();
+			db[Bank::count-1].defineBankManual();
 
-			db[Bank().count - 1] = newBank;
 			cout << "\nBank has been succesfully added to data base" << endl;
 			break;
-
+			cout << Bank::count;
 		case '4':
 			cout << "Enter Surname: ";
 			char surname4[MAXNAMELEN];
@@ -215,10 +252,10 @@ void main() {
 			char name4[MAXNAMELEN];
 			cin >> name4;
 
-			for (int i = 0; i < dbLen; i++) {
-				if (strcmp(name4, db[i].name) == 0 && strcmp(surname4, db[i].surname) == 0) {
+			for (int i = 0; i < Bank::count; i++) {
+				if (strcmp(name4, db[i].getName()) == 0 && strcmp(surname4, db[i].getSurname()) == 0) {
 					found4 = true;
-					getBankInfo(db[i]);
+					getBankInfo(&db[i]);
 					break;
 				}
 			}
@@ -230,17 +267,14 @@ void main() {
 			cout << "Enter a number, accounts with deposit higher than it will be shown:" << endl;
 			cin >> sum5;
 
-			for (int i = 0; i < dbLen; i++)
+			for (int i = 0; i < Bank::count; i++)
 			{
-				if (db[i].sum > sum5) getBankInfo(db[i]);
+				if (db[i].sum > sum5) getBankInfo(&db[i]);
 			}
 			break;
 		case '0':
-			for (int i = 0; i < dbLen; ++i) {
-				delete[] db[i].name;
-				delete[] db[i].surname;
-			}
-			free(db);
+			cout << Bank::count;
+			delete[] db;
 			return;
 		default:
 			cout << "Unexpected symbol, please try again\n";
