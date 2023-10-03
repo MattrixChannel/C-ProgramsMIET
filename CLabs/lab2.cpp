@@ -11,8 +11,11 @@ class Bank {
 	int id;
 	char* name;
 	char* surname;
+
+	friend void getBankInfo(Bank* bnk);
 public:
 	double sum;
+
 
 	static int count;
 	static int longestName;
@@ -77,6 +80,13 @@ public:
 		sum = _sum;
 		id = count;
 	}
+
+	void getAccsWithDepositMoreThan(Bank* db, int summ) {
+		for (int i = 0; i < Bank::count; i++)
+		{
+			if (db[i].sum > summ) getBankInfo(&db[i]);
+		}
+	}
 };
 
 int Bank::count = 0;
@@ -108,11 +118,11 @@ void dbInfo(Bank* db) {
 }
 
 void getBankInfo(Bank* bnk) {
-	cout << "\n" << setw(9) << "Id: " << bnk->getId() << endl;
+	cout << "\n" << setw(9) << "Id: " << bnk->id << endl;
 
-	cout << setw(9) << "Surname: " << bnk->getSurname() << endl;
+	cout << setw(9) << "Surname: " << bnk->surname << endl;
 
-	cout << setw(9) << "Name: " << bnk->getName() << endl;
+	cout << setw(9) << "Name: " << bnk->name << endl;
 
 	cout << setw(9) << "Deposit: " << bnk->sum << endl << endl;
 }
@@ -267,13 +277,11 @@ void main() {
 			cout << "Enter a number, accounts with deposit higher than it will be shown:" << endl;
 			cin >> sum5;
 
-			for (int i = 0; i < Bank::count; i++)
-			{
-				if (db[i].sum > sum5) getBankInfo(&db[i]);
-			}
+			db[0].getAccsWithDepositMoreThan(db, sum5);
+
 			break;
 		case '0':
-			cout << Bank::count;
+			//cout << Bank::count;
 			delete[] db;
 			return;
 		default:
