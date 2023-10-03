@@ -1,0 +1,5 @@
+0 Waltuh White 60000.000000
+1 Mr Mister 7000.000000
+2 Mihail Petrovich 5000.000000
+3 Brasl Petr 5.000000
+4 Abc Cde 26345.000000
