@@ -149,7 +149,7 @@ void cpyDB(Bank* Don, Bank* Rec, int size) {
 	Rec[size].setId(size + 1);
 }
 
-void expandDb(Bank* db) {
+Bank* expandDb(Bank* db) {
 	int size = Bank::count;
 
 	Bank* newDb = new Bank[size + 1];
@@ -158,9 +158,10 @@ void expandDb(Bank* db) {
 		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
 		newDb[i].setId(i + 1);
 	}
+	newDb[size].setId(size + 1);
 
 	delete[] db;
-	db = newDb;
+	return newDb;
 }
 
 void motd() {
@@ -209,13 +210,7 @@ void main() {
 		fscanf_s(dbFile, "%lf", &(bufSum));
 
 		if (i != 0) {
-			
-			int size = Bank::count;
-			Bank* newBank = new Bank[size + 1];
-			cpyDB(db, newBank, size);
-			delete[] db;
-			db = newBank;
-			//expandDb(db);
+			db = expandDb(db);
 		}
 
 		db[i].defineBankAuto(bufName, bufSurname, bufSum);
@@ -228,9 +223,6 @@ void main() {
 		motd();
 		char var;
 		cin >> var;
-
-		int size3;
-		Bank* newBank3;
 
 		bool found4 = false;
 		double sum5 = 0;
@@ -259,11 +251,8 @@ void main() {
 			break;
 		case '3':
 			//cout << Bank::count;
-			size3 = Bank::count;
-			newBank3 = new Bank[size3 + 1];
-			cpyDB(db, newBank3, size3);
-			delete[] db;
-			db = newBank3;
+
+			db = expandDb(db);
 
 			cout << endl;
 
@@ -314,11 +303,7 @@ void main() {
 
 		case '7':
 			//cout << Bank::count;
-			size3 = Bank::count;
-			newBank3 = new Bank[size3 + 1];
-			cpyDB(db, newBank3, size3);
-			delete[] db;
-			db = newBank3;
+			db = expandDb(db);
 
 			cout << endl;
 
