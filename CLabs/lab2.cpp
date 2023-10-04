@@ -20,14 +20,14 @@ public:
 	static int count;
 	static int longestName;
 	static int longestSurname;
-	
+
 	int getId() { return id; };
 	void setId(int num) { id = num; };
 	char* getSurname() { return surname; };
 	char* getName() { return name; };
 
 	Bank() {
-		id = count+1;
+		id = count + 1;
 		name = new char[MAXNAMELEN];
 		strcpy_s(name, 12, "DefaultName");
 		surname = new char[MAXNAMELEN];
@@ -61,14 +61,14 @@ public:
 
 		cout << "Deposit: ";
 		cin >> sum;
-		
+
 	}
 
 	void defineBankAuto(char* _name, char* _surname, double _sum) {
 		strcpy_s(surname, strlen(_surname) + 1, _surname);
 
 		if (strlen(_surname) > longestSurname) {
-		longestSurname = strlen(_surname);
+			longestSurname = strlen(_surname);
 		}
 
 		strcpy_s(name, strlen(_name) + 1, _name);
@@ -135,7 +135,7 @@ void cpyDB(Bank* Don, Bank* Rec, int size) {
 	Rec[size].setId(size + 1);
 }
 
-void expandDb(Bank* db) {
+Bank* expandDb(Bank* db) {
 	int size = Bank::count;
 
 	Bank* newDb = new Bank[size + 1];
@@ -144,9 +144,10 @@ void expandDb(Bank* db) {
 		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
 		newDb[i].setId(i + 1);
 	}
+	newDb[size].setId(size + 1);
 
 	delete[] db;
-	db = newDb;
+	return newDb;
 }
 
 void motd() {
@@ -166,8 +167,6 @@ void main() {
 	FILE* dbFile;
 	fopen_s(&dbFile, DBNAME, "a+");
 	//cout << Bank::count;
-	int size3;
-	Bank* newBank3;
 
 	//cout << Bank::count;
 	int except = 0;
@@ -188,20 +187,14 @@ void main() {
 
 		if (feof(dbFile)) {
 			break;
- 		}
+		}
 
 		fscanf_s(dbFile, "%s", bufName, MAXNAMELEN);
 
 		fscanf_s(dbFile, "%lf", &(bufSum));
 
 		if (i != 0) {
-			
-			int size = Bank::count;
-			Bank* newBank = new Bank[size + 1];
-			cpyDB(db, newBank, size);
-			delete[] db;
-			db = newBank;
-			//expandDb(db);
+			db = expandDb(db);
 		}
 
 		db[i].defineBankAuto(bufName, bufSurname, bufSum);
@@ -239,17 +232,12 @@ void main() {
 			dbInfo(db);
 			break;
 		case '3':
-			//cout << Bank::count;
-			size3 = Bank::count;
-			newBank3 = new Bank[size3 + 1];
-			cpyDB(db, newBank3, size3);
-			delete[] db;
-			db = newBank3;
+			db = expandDb(db);
 
 			cout << endl;
 
 			//cout << Bank::count << ' ' << db[0].getName();
-			db[Bank::count-1].defineBankManual();
+			db[Bank::count - 1].defineBankManual();
 
 			cout << "\nBank has been succesfully added to data base" << endl;
 			break;
