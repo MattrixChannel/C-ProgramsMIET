@@ -61,7 +61,6 @@ public:
 
 		cout << "Deposit: ";
 		cin >> sum;
-		
 	}
 
 	void defineBankAuto(char* _name, char* _surname, double _sum) {
@@ -86,6 +85,21 @@ public:
 		{
 			if (db[i].sum > summ) getBankInfo(&db[i]);
 		}
+	}
+
+	const void operator + (double num) {
+		sum += num;
+	}
+
+	friend istream& operator>> (istream& is, Bank& bnk)
+	{
+		cout << "Surname: ";
+		is >> bnk.name;
+		cout << "Name: ";
+		is >> bnk.surname;
+		cout << "Deposit: ";
+		is >> bnk.sum;
+		return is;
 	}
 };
 
@@ -135,7 +149,7 @@ void cpyDB(Bank* Don, Bank* Rec, int size) {
 	Rec[size].setId(size + 1);
 }
 
-void expandDb(Bank* db) {
+Bank* expandDb(Bank* db) {
 	int size = Bank::count;
 
 	Bank* newDb = new Bank[size + 1];
@@ -144,9 +158,10 @@ void expandDb(Bank* db) {
 		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
 		newDb[i].setId(i + 1);
 	}
+	newDb[size].setId(size + 1);
 
 	delete[] db;
-	db = newDb;
+	return newDb;
 }
 
 void motd() {
@@ -156,6 +171,8 @@ void motd() {
 	cout << "Add new account:                      3\n";
 	cout << "Get account info:                     4\n";
 	cout << "Find accounts with deposit more than: 5\n";
+	cout << "Add number to the deposit:            6\n";
+	cout << "Add new accout (experimantal)         7\n";
 	cout << "Exit:                                 0\n";
 	cout << "\nType a number: ";
 }
@@ -166,8 +183,6 @@ void main() {
 	FILE* dbFile;
 	fopen_s(&dbFile, DBNAME, "a+");
 	//cout << Bank::count;
-	int size3;
-	Bank* newBank3;
 
 	//cout << Bank::count;
 	int except = 0;
@@ -195,13 +210,7 @@ void main() {
 		fscanf_s(dbFile, "%lf", &(bufSum));
 
 		if (i != 0) {
-			
-			int size = Bank::count;
-			Bank* newBank = new Bank[size + 1];
-			cpyDB(db, newBank, size);
-			delete[] db;
-			db = newBank;
-			//expandDb(db);
+			db = expandDb(db);
 		}
 
 		db[i].defineBankAuto(bufName, bufSurname, bufSum);
@@ -217,6 +226,8 @@ void main() {
 
 		bool found4 = false;
 		double sum5 = 0;
+		int num6 = 0;
+		int id6 = 0;
 
 		int id4 = -1;
 
@@ -240,11 +251,8 @@ void main() {
 			break;
 		case '3':
 			//cout << Bank::count;
-			size3 = Bank::count;
-			newBank3 = new Bank[size3 + 1];
-			cpyDB(db, newBank3, size3);
-			delete[] db;
-			db = newBank3;
+
+			db = expandDb(db);
 
 			cout << endl;
 
@@ -278,6 +286,31 @@ void main() {
 			cin >> sum5;
 
 			db[0].getAccsWithDepositMoreThan(db, sum5);
+
+			break;
+		case '6':
+			cout << "Enter a client id: ";
+			cin >> id6;
+			id6--;
+
+			cout << "Enter how much you want to add: ";
+			cin >> num6;
+			db[id6] + num6;
+
+			cout << "Done!" << endl;
+
+			break;
+
+		case '7':
+			//cout << Bank::count;
+			db = expandDb(db);
+
+			cout << endl;
+
+			//cout << Bank::count << ' ' << db[0].getName();
+			cin >> db[Bank::count - 1];
+
+			cout << "\nBank has been succesfully added to data base" << endl;
 
 			break;
 		case '0':
