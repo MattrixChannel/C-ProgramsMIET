@@ -167,7 +167,7 @@ void main() {
 	FILE* dbFile;
 	fopen_s(&dbFile, DBNAME, "a+");
 	//cout << Bank::count;
-
+	
 	//cout << Bank::count;
 	int except = 0;
 
