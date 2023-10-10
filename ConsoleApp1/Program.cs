@@ -58,6 +58,11 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine(stud != a2);
 
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Test theTest = new Test();
+            Console.WriteLine(theTest.ToString());
             //*/
         }
     }

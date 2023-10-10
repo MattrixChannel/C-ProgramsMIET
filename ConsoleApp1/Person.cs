@@ -8,9 +8,9 @@ namespace ConsoleApp1
 {
     internal class Person : IDateAndCopy
     {
-        private string _name;
-        private string _surName;
-        private System.DateTime _birthday;
+        protected string _name;
+        protected string _surName;
+        protected System.DateTime _birthday;
 
         internal Person(string name, string surName, DateTime birthday)
         {
@@ -40,7 +40,7 @@ namespace ConsoleApp1
                 _surName = value;
             }
         }
-
+        
         public System.DateTime birthday
         {
             get => _birthday;
