@@ -38,10 +38,14 @@ namespace ConsoleApp1
             Console.WriteLine();
             stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
             stud.education = Education.Specialist;
-            stud.group = 26;
+            stud.group = 430;
             Exam[] examss = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
             List<Exam> exams = new List<Exam>( examss);
+            Test[] testss = { new Test("Art", false) };
+            Console.WriteLine(testss[0].ToString());
+            List<Test> tests = new List<Test>(testss);
             stud.AddExams(exams);
+            stud.AddTests(tests);
             Console.WriteLine(stud.ToString());
             Student a2 = stud.DeepCopy() as Student;
 
@@ -53,7 +57,7 @@ namespace ConsoleApp1
             stud.name = "Mr Walter";
             stud.education = Education.Bachelor;
             stud.birthday = new DateTime(2003, 3, 29);
-            stud.group = 16;
+            stud.group = 160;
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine(stud.ToString());
@@ -76,10 +80,22 @@ namespace ConsoleApp1
             Console.WriteLine(stud.name + ' ' + stud.person.name);
 
             Console.WriteLine();
-            Console.WriteLine(stud.GetType());
+            Console.WriteLine();
 
+            Console.WriteLine("Все предметы");
+            foreach(object i in stud)
+            {
+                Console.WriteLine(i.ToString());
+            }
 
+            Console.WriteLine();
+            Console.WriteLine();
 
+            Console.WriteLine("Все экзы 4+");
+            foreach (Exam i in stud.GetEnumeratorWithMark(3))
+            {
+                Console.WriteLine(i.ToString());
+            }
             Console.ReadKey();
             //*/
         }

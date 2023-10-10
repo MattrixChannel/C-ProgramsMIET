@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Schema;
 
 namespace ConsoleApp1
 {
-    internal class Student : Person
+    internal class Student : Person, IEnumerable
     {
         private Education _education;
         private int _group;
@@ -33,6 +35,7 @@ namespace ConsoleApp1
         public Person person { get { return base.DeepCopy() as Person; }
             set
             {
+
                 if (value.GetType() == typeof(Person))
                 {
                     name = (value as Person).name; // !!!!!!!!!!
@@ -49,9 +52,29 @@ namespace ConsoleApp1
             }
         }
         public Education education { get { return _education; } set { _education = value; } }
-        public int group { get { return _group;} set { _group = value; } }
+        public int group
+        {
+            get { return _group; }
+            set {
+                try
+                {
+                    if (value <= 100 || value > 599)
+                    {
+                        throw new Exception("Group number must be between 100 and 600");
+                    }
+                    else
+                    {
+                        _group = value;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
+            }
+        }
         public List<Exam> exam { get { return _exam; } set { _exam = value; } }
-        public List<Test> test { get { return _test; } set { _test = value; } } 
+        public List<Test> test { get { return _test; } set { _test = value; } }
 
         public double avrMark
         {
@@ -59,7 +82,7 @@ namespace ConsoleApp1
             {
                 int marksCount = 0;
                 double marksSum = 0;
-                for (int i = 0; i < _exam.Capacity; i++)
+                for (int i = 0; i < _exam.Count; i++)
                 {
                     marksCount++;
                     marksSum += exam[i].mark;
@@ -77,20 +100,29 @@ namespace ConsoleApp1
         }
 
         public void AddExams( List<Exam> exams)
-        {for (int i = 0; i < exams.Capacity;i++)
+        {for (int i = 0; i < exams.Count;i++)
             {
                 exam.Add(exams[i]);
+            }
+        }
+        public void AddTests(List<Test> tests)
+        {
+            for (int i = 0; i < tests.Count; i++)
+            {
+                test.Add(tests[i]);
             }
         }
 
         public override string ToString()
         {
             string res = $"{person.ToString()}\n{education}\n{group}";
-            for (int i = 0; i < exam.Capacity; i++)
+
+            for (int i = 0; i < exam.Count; i++)
             {
                 res += $"\n{exam[i].ToString()}" ;
             }
-            for (int i = 0; i < test.Capacity; i++)
+
+            for (int i = 0; i < test.Count; i++)
             {
                 res += $"\n{test[i].ToString()}";
             }
@@ -108,11 +140,11 @@ namespace ConsoleApp1
 
         private bool Equal(Student stud)
         {
-            if (person != stud.person || education != stud.education || group != stud.group || exam.Capacity != stud.exam.Capacity)
+            if (person != stud.person || education != stud.education || group != stud.group || exam.Count != stud.exam.Count)
             {
                 return false;
             }
-            for (int i = 0; i < exam.Capacity; i++)
+            for (int i = 0; i < exam.Count; i++)
             {
                 if (exam[i] != stud.exam[i])
                 {
@@ -136,7 +168,7 @@ namespace ConsoleApp1
         public override int GetHashCode()
         {
             int res = person.GetHashCode() + group.GetHashCode() + education.GetHashCode();
-            for (int i = 0;i < exam.Capacity; i++)
+            for (int i = 0;i < exam.Count; i++)
             {
                 res += exam[i].GetHashCode();
             }
@@ -150,6 +182,22 @@ namespace ConsoleApp1
             return newStud;
         }
         //public DateTime Date { get { return person.birthday; } set { person.birthday = value; } }
+
+        public IEnumerator GetEnumerator() 
+        {
+            return new StudentEnum(_exam, _test);
+        }
+
+        public IEnumerable<Exam> GetEnumeratorWithMark(int mark)
+        {
+            for (int i = 0; i < exam.Count; i++)
+            {
+                if (exam[i].mark > mark)
+                {
+                    yield return exam[i];
+                }
+            }
+        }
     }
 
 }
