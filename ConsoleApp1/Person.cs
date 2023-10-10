@@ -10,7 +10,7 @@ namespace ConsoleApp1
     {
         protected string _name;
         protected string _surName;
-        protected System.DateTime _birthday;
+        protected DateTime _birthday;
 
         internal Person(string name, string surName, DateTime birthday)
         {

@@ -120,8 +120,8 @@ namespace ConsoleApp1
 
             Student FirstStudent = new Student();
 
-            Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
-            Test[] tests = { new Test("Art", false) };
+            Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 1, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+            Test[] tests = { new Test("Art", false) , new Test("PE", true), new Test("IT", false), new Test("Math", true)};
             FirstStudent.AddExams(exams);
             FirstStudent.AddTests(tests);
             
@@ -143,7 +143,7 @@ namespace ConsoleApp1
 
             Student SecondStudent = FirstStudent.DeepCopy() as Student;
             FirstStudent.name = "Peter";
-            FirstStudent.exam[0].name = "NEWNAME";
+            //FirstStudent.exam[0].name = "NEWNAME";
             exams[0].name = "NEWNAMEeeee";
             Console.WriteLine(FirstStudent.ToString() + "\n\n" + SecondStudent.ToString());
 
@@ -168,7 +168,7 @@ namespace ConsoleApp1
             // Student, вывести список всех зачетов и экзаменов
             Console.WriteLine("N6");
 
-            foreach(object i in FirstStudent)
+            foreach(var i in FirstStudent)
             {
                 Console.WriteLine(i.ToString());
             }
@@ -181,7 +181,44 @@ namespace ConsoleApp1
             Console.WriteLine("N7");
 
             Console.WriteLine("Все экзы 4+");
-            foreach (Exam i in FirstStudent.GetEnumeratorWithMark(3))
+            foreach (var i in FirstStudent.GetEnumeratorWithMark(3))
+            {
+                Console.WriteLine(i.ToString());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 8 С помощью оператора foreach для объекта типа Student вывести
+            // список предметов, которые есть как в списке зачетов, так и в списке
+            // экзаменов
+            Console.WriteLine("N8");
+
+            foreach(var i in FirstStudent.GetEnumeratorInExamAndTest())
+            {
+                Console.WriteLine(i.ToString());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 9 определить итератор для перебора сданных зачетов и экзаменов
+            // (объектов типа object), для этого определить метод, содержащий блок
+            // итератора и использующий оператор yield; сданный экзамен -экзамен с
+            // оценкой больше 2;
+            Console.WriteLine("N9");
+
+            foreach(var i in FirstStudent.GetEnumeratorPassed())
+            {
+                Console.WriteLine(i.ToString());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 10 определить итератор для перебора всех сданных зачетов (объектов
+            // типа Test), для которых сдан и экзамен, для этого определить метод,
+            // содержащий блок итератора и использующий оператор yield.
+            Console.WriteLine("N10");
+
+            foreach(var i in FirstStudent.GetEnumeratorExamAndTestPassed())
             {
                 Console.WriteLine(i.ToString());
             }

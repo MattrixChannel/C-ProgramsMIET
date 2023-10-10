@@ -16,7 +16,7 @@ namespace ConsoleApp1
         private List<Exam> _exam;
         private List<Test> _test;
 
-        internal Student( Person person, Education education, int group ):base(person.name, person.surname, person.birthday)
+        internal Student(Person person, Education education, int group) : base(person.name, person.surname, person.birthday)
         {
             _education = education;
             _group = group;
@@ -31,8 +31,10 @@ namespace ConsoleApp1
             _exam = new List<Exam>();
             _test = new List<Test>();
         }
-        
-        public Person person { get { return base.DeepCopy() as Person; }
+
+        public Person person
+        {
+            get { return base.DeepCopy() as Person; }
             set
             {
 
@@ -55,7 +57,8 @@ namespace ConsoleApp1
         public int group
         {
             get { return _group; }
-            set {
+            set
+            {
                 try
                 {
                     if (value <= 100 || value > 599)
@@ -99,8 +102,9 @@ namespace ConsoleApp1
             }
         }
 
-        public void AddExams( Exam[] exams)
-        {for (int i = 0; i < exams.Length;i++)
+        public void AddExams(Exam[] exams)
+        {
+            for (int i = 0; i < exams.Length; i++)
             {
                 exam.Add(exams[i].DeepCopy() as Exam);
             }
@@ -119,7 +123,7 @@ namespace ConsoleApp1
 
             for (int i = 0; i < exam.Count; i++)
             {
-                res += $"\n{exam[i].ToString()}" ;
+                res += $"\n{exam[i].ToString()}";
             }
 
             for (int i = 0; i < test.Count; i++)
@@ -168,7 +172,7 @@ namespace ConsoleApp1
         public override int GetHashCode()
         {
             int res = person.GetHashCode() + group.GetHashCode() + education.GetHashCode();
-            for (int i = 0;i < exam.Count; i++)
+            for (int i = 0; i < exam.Count; i++)
             {
                 res += exam[i].GetHashCode();
             }
@@ -189,7 +193,7 @@ namespace ConsoleApp1
             return (IEnumerator)GetEnumerator();
         }
 
-        public IEnumerator GetEnumerator() 
+        public IEnumerator GetEnumerator()
         {
             return new StudentEnum(_exam, _test);
         }
@@ -201,6 +205,46 @@ namespace ConsoleApp1
                 if (exam[i].mark > mark)
                 {
                     yield return exam[i];
+                }
+            }
+        }
+
+        public IEnumerable GetEnumeratorInExamAndTest()
+        {
+            foreach(var i in exam)
+            {
+                foreach(var j in test)
+                {
+                    if (i.name == j.name)
+                    yield return i;
+                }
+            }
+        }
+
+        public IEnumerable GetEnumeratorPassed()
+        {
+            foreach (var i in GetEnumeratorWithMark(2))
+            {
+                yield return i;
+            }
+
+            foreach(var i in test)
+            {
+                if (i.pass)
+                {
+                    yield return i;
+                }
+            }
+        }
+
+        public IEnumerable GetEnumeratorExamAndTestPassed()
+        {
+            foreach (var j in test)
+            {
+                foreach (var i in exam)
+                {
+                    if (i.name == j.name && i.mark > 2 && j.pass)
+                        yield return j;
                 }
             }
         }
