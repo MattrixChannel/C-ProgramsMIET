@@ -26,5 +26,10 @@ namespace ConsoleApp1
         {
             return name + " " + pass;
         }
+
+        public object DeepCopy()
+        {
+            return new Test(name, pass);
+        }
     }
 }

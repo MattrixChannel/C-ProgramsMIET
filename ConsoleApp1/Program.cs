@@ -17,7 +17,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            //* Testing
+            /* Testing
               
             Person a = new Person("Peter", "Brasl", DateTime.Now);
             Person b = a.DeepCopy() as Person;
@@ -98,6 +98,95 @@ namespace ConsoleApp1
             }
             Console.ReadKey();
             //*/
+
+            // 1 Создать два объекта типа Person с совпадающими данными и
+            // проверить, что ссылки на объекты не равны, а объекты равны, вывести
+            // значения хэш-кодов для объектов.
+            Console.WriteLine("N1");
+
+            Person FirstPerson = new Person();
+            Person SecondPerson = new Person();
+            Console.WriteLine(FirstPerson.ToString());
+            Console.WriteLine(SecondPerson.ToString());
+
+            Console.WriteLine(FirstPerson == SecondPerson);
+            Console.WriteLine(FirstPerson.GetHashCode() + " " + SecondPerson.GetHashCode());
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 2 Создать объект типа Student, добавить элементы в список экзаменов и
+            // зачетов, вывести данные объекта Student.
+            Console.WriteLine("N2");
+
+            Student FirstStudent = new Student();
+
+            Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+            Test[] tests = { new Test("Art", false) };
+            FirstStudent.AddExams(exams);
+            FirstStudent.AddTests(tests);
+            
+            Console.WriteLine(FirstStudent.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 3 Вывести значение свойства типа Person для объекта типа Student.
+            Console.WriteLine("N3");
+            Console.WriteLine(FirstStudent.person);
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 4 С помощью метода DeepCopy() создать полную копию объекта Student.
+            // Изменить данные в исходном объекте Student и вывести копию и
+            // исходный объект, полная копия исходного объекта должна остаться
+            // без изменений.
+            Console.WriteLine("N4");
+
+            Student SecondStudent = FirstStudent.DeepCopy() as Student;
+            FirstStudent.name = "Peter";
+            FirstStudent.exam[0].name = "NEWNAME";
+            exams[0].name = "NEWNAMEeeee";
+            Console.WriteLine(FirstStudent.ToString() + "\n\n" + SecondStudent.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 5 В блоке try/catch присвоить свойству с номером группы некорректное
+            // значение, в обработчике исключения вывести сообщение, переданное
+            // через объект - исключение
+            Console.WriteLine("N5");
+            try
+            {
+                FirstStudent.group = 1;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 6 С помощью оператора foreach для итератора, определенного в классе
+            // Student, вывести список всех зачетов и экзаменов
+            Console.WriteLine("N6");
+
+            foreach(object i in FirstStudent)
+            {
+                Console.WriteLine(i.ToString());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            // 7 С помощью оператора foreach для итератора с параметром
+            // определенного в классе Student, вывести список всех экзаменов с
+            // оценкой выше 3.
+            Console.WriteLine("N7");
+
+            Console.WriteLine("Все экзы 4+");
+            foreach (Exam i in FirstStudent.GetEnumeratorWithMark(3))
+            {
+                Console.WriteLine(i.ToString());
+            }
+
+            Console.ReadKey();
         }
     }
 }

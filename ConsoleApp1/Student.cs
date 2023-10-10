@@ -99,17 +99,17 @@ namespace ConsoleApp1
             }
         }
 
-        public void AddExams( List<Exam> exams)
-        {for (int i = 0; i < exams.Count;i++)
+        public void AddExams( Exam[] exams)
+        {for (int i = 0; i < exams.Length;i++)
             {
-                exam.Add(exams[i]);
+                exam.Add(exams[i].DeepCopy() as Exam);
             }
         }
-        public void AddTests(List<Test> tests)
+        public void AddTests(Test[] tests)
         {
-            for (int i = 0; i < tests.Count; i++)
+            for (int i = 0; i < tests.Length; i++)
             {
-                test.Add(tests[i]);
+                test.Add(tests[i].DeepCopy() as Test);
             }
         }
 
@@ -178,10 +178,16 @@ namespace ConsoleApp1
         public override object DeepCopy()
         {
             Student newStud = new Student(person.DeepCopy() as Person, education, group);
-            newStud.AddExams(exam);
+            newStud.AddExams(exam.ToArray());
+            newStud.AddTests(test.ToArray());
             return newStud;
         }
         //public DateTime Date { get { return person.birthday; } set { person.birthday = value; } }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator)GetEnumerator();
+        }
 
         public IEnumerator GetEnumerator() 
         {
@@ -197,6 +203,11 @@ namespace ConsoleApp1
                     yield return exam[i];
                 }
             }
+        }
+
+        public IEnumerator GetPassed()
+        {
+            return new StudentEnum(_exam, _test);
         }
     }
 
