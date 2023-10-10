@@ -33,6 +33,9 @@ namespace ConsoleApp1
             Console.WriteLine();
 
             Student stud = new Student();
+            Console.WriteLine(stud.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
             stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
             stud.education = Education.Specialist;
             stud.group = 26;
@@ -64,6 +67,20 @@ namespace ConsoleApp1
 
             Test theTest = new Test();
             Console.WriteLine(theTest.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Console.WriteLine(stud.name + ' ' + stud.person.name);
+            stud.person.name = "123";
+            Console.WriteLine(stud.name + ' ' + stud.person.name);
+
+            Console.WriteLine();
+            Console.WriteLine(stud.GetType());
+
+
+
+            Console.ReadKey();
             //*/
         }
     }

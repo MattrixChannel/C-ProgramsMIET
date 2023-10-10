@@ -19,6 +19,7 @@ namespace ConsoleApp1
             _education = education;
             _group = group;
             _exam = new List<Exam>();
+            _test = new List<Test>();
         }
 
         internal Student()
@@ -26,19 +27,31 @@ namespace ConsoleApp1
             _education = Education.Bachelor;
             _group = 0;
             _exam = new List<Exam>();
+            _test = new List<Test>();
         }
         
         public Person person { get { return base.DeepCopy() as Person; }
             set
             {
-                name = (value as Person).name; // !!!!!!!!!!
-                surname = (value as Person).surname;
-                birthday = (value as Person).birthday;
+                if (value.GetType() == typeof(Person))
+                {
+                    name = (value as Person).name; // !!!!!!!!!!
+                    surname = (value as Person).surname;
+                    birthday = (value as Person).birthday;
+                }
+
+                else
+                {
+                    name = base.name;
+                    surname = base.surname;
+                    birthday = base.birthday;
+                }
             }
         }
         public Education education { get { return _education; } set { _education = value; } }
         public int group { get { return _group;} set { _group = value; } }
         public List<Exam> exam { get { return _exam; } set { _exam = value; } }
+        public List<Test> test { get { return _test; } set { _test = value; } } 
 
         public double avrMark
         {
@@ -76,6 +89,10 @@ namespace ConsoleApp1
             for (int i = 0; i < exam.Capacity; i++)
             {
                 res += $"\n{exam[i].ToString()}" ;
+            }
+            for (int i = 0; i < test.Capacity; i++)
+            {
+                res += $"\n{test[i].ToString()}";
             }
             return res;
         }
