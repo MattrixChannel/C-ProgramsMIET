@@ -9,33 +9,36 @@ namespace ConsoleApp1
 {
     internal class Student : Person
     {
-        private Person _person;
         private Education _education;
         private int _group;
-        private Exam[] _exam;
+        private List<Exam> _exam;
+        private List<Test> _test;
 
-        internal Student( Person person, Education education, int group )
+        internal Student( Person person, Education education, int group ):base(person.name, person.surname, person.birthday)
         {
-            _person = person;
             _education = education;
             _group = group;
-            _exam = new Exam[1];
-            _exam[0] = new Exam("Example", 0, DateTime.Now);
+            _exam = new List<Exam>();
         }
 
         internal Student()
         {
-            _person = new Person();
             _education = Education.Bachelor;
             _group = 0;
-            _exam = new Exam[1];
-            _exam[0] = new Exam("Example", 0, DateTime.Now);
+            _exam = new List<Exam>();
         }
         
-        public Person person { get { return _person; } set { _person = value; } }
+        public Person person { get { return base.DeepCopy() as Person; }
+            set
+            {
+                name = (value as Person).name; // !!!!!!!!!!
+                surname = (value as Person).surname;
+                birthday = (value as Person).birthday;
+            }
+        }
         public Education education { get { return _education; } set { _education = value; } }
         public int group { get { return _group;} set { _group = value; } }
-        public Exam[] exam { get { return _exam; } set { _exam = value; } }
+        public List<Exam> exam { get { return _exam; } set { _exam = value; } }
 
         public double avrMark
         {
@@ -43,7 +46,7 @@ namespace ConsoleApp1
             {
                 int marksCount = 0;
                 double marksSum = 0;
-                for (int i = 0; i < _exam.Length; i++)
+                for (int i = 0; i < _exam.Capacity; i++)
                 {
                     marksCount++;
                     marksSum += exam[i].mark;
@@ -60,24 +63,17 @@ namespace ConsoleApp1
             }
         }
 
-        public void AddExams( params Exam[] exams)
-        {
-            if (exam[0].name == "Example")
+        public void AddExams( List<Exam> exams)
+        {for (int i = 0; i < exams.Capacity;i++)
             {
-                Array.Resize(ref _exam, exams.Length);
-            }
-            else Array.Resize(ref _exam, _exam.Length + exams.Length);
-
-            for (int i = 0; i < exams.Length;i++)
-            {
-                exam[i + (exam.Length - exams.Length)] = exams[i].DeepCopy() as Exam;
+                exam.Add(exams[i]);
             }
         }
 
         public override string ToString()
         {
             string res = $"{person.ToString()}\n{education}\n{group}";
-            for (int i = 0; i < exam.Length; i++)
+            for (int i = 0; i < exam.Capacity; i++)
             {
                 res += $"\n{exam[i].ToString()}" ;
             }
@@ -95,11 +91,11 @@ namespace ConsoleApp1
 
         private bool Equal(Student stud)
         {
-            if (person != stud.person || education != stud.education || group != stud.group || exam.Length != stud.exam.Length)
+            if (person != stud.person || education != stud.education || group != stud.group || exam.Capacity != stud.exam.Capacity)
             {
                 return false;
             }
-            for (int i = 0; i < exam.Length; i++)
+            for (int i = 0; i < exam.Capacity; i++)
             {
                 if (exam[i] != stud.exam[i])
                 {
@@ -123,7 +119,7 @@ namespace ConsoleApp1
         public override int GetHashCode()
         {
             int res = person.GetHashCode() + group.GetHashCode() + education.GetHashCode();
-            for (int i = 0;i < exam.Length; i++)
+            for (int i = 0;i < exam.Capacity; i++)
             {
                 res += exam[i].GetHashCode();
             }

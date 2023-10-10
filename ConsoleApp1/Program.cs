@@ -36,7 +36,8 @@ namespace ConsoleApp1
             stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
             stud.education = Education.Specialist;
             stud.group = 26;
-            Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now), };
+            Exam[] examss = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+            List<Exam> exams = new List<Exam>( examss);
             stud.AddExams(exams);
             Console.WriteLine(stud.ToString());
             Student a2 = stud.DeepCopy() as Student;
@@ -46,9 +47,9 @@ namespace ConsoleApp1
             Console.WriteLine(stud != a2);
 
             stud.exam[0].name = "Not IT";
-            stud.person.name = "Mr Walter";
+            stud.name = "Mr Walter";
             stud.education = Education.Bachelor;
-            stud.person.birthday = new DateTime(2003, 3, 29);
+            stud.birthday = new DateTime(2003, 3, 29);
             stud.group = 16;
             Console.WriteLine();
             Console.WriteLine();
