@@ -13,10 +13,19 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            //Person a = new Person("Peter", "Brasl", DateTime.Now);
-            //Student a1 = new Student(a, Education.Bachelor, 26);
-            //Person b = a.DeepCopy() as Person;
-            //Person c = new Person();
+            Person a = new Person("Peter", "Brasl", DateTime.Now);
+            Person b = a.DeepCopy() as Person;
+            Console.WriteLine(a.ToString());
+            Console.WriteLine(b.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
+            a.name = "123";
+            Console.WriteLine(a.ToString());
+            Console.WriteLine(b.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine();
+
             Student stud = new Student();
             stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
             stud.education = Education.Specialist;
@@ -25,11 +34,17 @@ namespace ConsoleApp1
             stud.AddExams(exams);
             Console.WriteLine(stud.ToString());
             Student a2 = stud.DeepCopy() as Student;
+            stud.exam[0].name = "Not IT";
+            stud.person.name = "Mr Walter";
+            stud.education = Education.Bachelor;
+            stud.person.birthday = new DateTime(2003, 3, 29);
+            stud.group = 16;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(stud.ToString());
             Console.WriteLine();
             Console.WriteLine(a2.ToString());
             Console.WriteLine();
-            Console.WriteLine(stud.GetHashCode());
-            Console.WriteLine(a2.GetHashCode());
         }
     }
 }

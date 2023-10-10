@@ -70,7 +70,7 @@ namespace ConsoleApp1
 
             for (int i = 0; i < exams.Length;i++)
             {
-                exam[i + (exam.Length - exams.Length)] = exams[i];
+                exam[i + (exam.Length - exams.Length)] = exams[i].DeepCopy() as Exam;
             }
         }
 
@@ -132,7 +132,7 @@ namespace ConsoleApp1
 
         public object DeepCopy()
         {
-            Student newStud = new Student(person, education, group);
+            Student newStud = new Student(person.DeepCopy() as Person, education, group);
             newStud.AddExams(exam);
             return newStud;
         }
