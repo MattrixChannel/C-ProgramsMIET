@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace ConsoleApp1
 {
-    internal class Student
+    internal class Student : Person
     {
         private Person _person;
         private Education _education;
@@ -84,7 +84,7 @@ namespace ConsoleApp1
             return res;
         }
 
-        public virtual string ToShortString()
+        public override string ToShortString()
         {
             return $"{person.ToString()}\n{education}\n{group}\n{avrMark}";
         }
@@ -130,11 +130,13 @@ namespace ConsoleApp1
             return res;
         }
 
-        public object DeepCopy()
+        public override object DeepCopy()
         {
             Student newStud = new Student(person.DeepCopy() as Person, education, group);
             newStud.AddExams(exam);
             return newStud;
         }
+        //public DateTime Date { get { return person.birthday; } set { person.birthday = value; } }
     }
+
 }

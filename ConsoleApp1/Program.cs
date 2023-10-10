@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    
+    interface IDateAndCopy
+    {
+        object DeepCopy();
+        DateTime Date { get; set; }
+    }
 
     internal class Program
     {
         static void Main(string[] args)
         {
+            //* Testing
+              
             Person a = new Person("Peter", "Brasl", DateTime.Now);
             Person b = a.DeepCopy() as Person;
             Console.WriteLine(a.ToString());
@@ -34,6 +40,11 @@ namespace ConsoleApp1
             stud.AddExams(exams);
             Console.WriteLine(stud.ToString());
             Student a2 = stud.DeepCopy() as Student;
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(stud != a2);
+
             stud.exam[0].name = "Not IT";
             stud.person.name = "Mr Walter";
             stud.education = Education.Bachelor;
@@ -45,6 +56,9 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine(a2.ToString());
             Console.WriteLine();
+            Console.WriteLine(stud != a2);
+
+            //*/
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal class Person
+    internal class Person : IDateAndCopy
     {
         private string _name;
         private string _surName;
@@ -92,11 +92,11 @@ namespace ConsoleApp1
             return name.GetHashCode() + surname.GetHashCode() + birthday.GetHashCode();
         }
 
-        public object DeepCopy()
+        public virtual object DeepCopy()
         {
             return new Person(name, surname, birthday);
         }
 
-
+        public DateTime Date { get { return birthday; } set { birthday = value; } }
     }
 }
