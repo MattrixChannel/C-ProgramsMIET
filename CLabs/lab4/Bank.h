@@ -1,12 +1,14 @@
-#pragma once
-#include<iostream>
+#pragma once 
+#include <iostream>
+#include <iomanip>
+#include "Man.h"
+#include <string>
 
 using namespace std;
 
 class Bank {
 	int id;
-	char* name;
-	char* surname;
+	Man FIO;
 
 public:
 	double sum;
@@ -16,20 +18,21 @@ public:
 	static int longestSurname;
 
 	int getId();
-	char* getSurname();
-	char* getName();
+	Man getFIO();
 
 	Bank();
 
 	~Bank();
 
-	void defineBankAuto(char* _name, char* _surname, double _sum);
+	void defineBankAuto(Man fio, double _sum);
 
 	static void getAccsWithDepositMoreThan(Bank* db, double summ);
 
 	static void dbInfo(Bank* db);
 
 	const void operator + (double num);
+
+	const bool operator == (Man pers);
 
 	friend void cpyDB(Bank* Don, Bank* Rec, int size);
 
@@ -38,4 +41,7 @@ public:
 	friend istream& operator>> (istream& is, Bank& bnk);
 
 	void getBankInfo();
+
+	friend Man;
+	friend void test();
 };

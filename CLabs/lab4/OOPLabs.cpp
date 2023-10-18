@@ -1,11 +1,15 @@
 ﻿#include <iostream>
+#include <fstream>
 #include <iomanip>
 #include "Bank.h"
+#include "Man.h"
+#include <string>
+
+using namespace std;
 
 #define MAXNAMELEN 30
 #define DBNAME "save.txt"
 
-using namespace std;
 
 /* Общие требования к заданиям - LAB 4
 1.	Продолжить работу над проектом
@@ -14,19 +18,21 @@ using namespace std;
 4.	Для выполнения функций, указанных в задании, написать диалоговый интерфейс, позволяющий выполнять функции в произвольном порядке многократно
 5.	При выполнении функции «выход из программы» нужно сохранить базу на диске
 6.	Первичное создание базы – ввод данных с клавиатуры
-7.	Если программа уже запускалась, то данные загружаются из файла перед выходом на диалог. Иными словами вносятся изменения и дополнения в уже существующую базу данных.
+7.	Если программа уже запускалась, то данные загружаются из файла перед выходом на диалог. Иными словами вносятся изменения и дополнения в
+		уже существующую базу данных.
 8.	Обязательные функции для всех вариантов:
-•	добавить несколько новых элементов в базу
-•	распечатка данных в табличном виде
-•	выход из программы
+	•	добавить несколько новых элементов в базу
+	•	распечатка данных в табличном виде
+	•	выход из программы
 9.	Остальные функции для работы с базой указаны в задании индивидуально.
 10.	 Примеры диалогового интерфейса и табличного вывода смотрите в лабораторной работе №1
-11.	Перегруженные операторы реализовывать как с помощью дружественной функции (ДФ), так и с помощью метода класса (МК). Если в задании не указан метод реализации – решаете по своему усмотрению.
+11.	Перегруженные операторы реализовывать как с помощью дружественной функции (ДФ), так и с помощью метода класса (МК).
+		Если в задании не указан метод реализации – решаете по своему усмотрению.
 */
 
 void cpyDB(Bank* Don, Bank* Rec, int size) {
 	for (int i = 0; i < size; i++) {
-		Rec[i].defineBankAuto(Don[i].getName(), Don[i].getSurname(), Don[i].sum);
+		Rec[i].defineBankAuto(Don[i].FIO, Don[i].sum);
 		Rec[i].id = i + 1;
 	}
 	Rec[size].id = size + 1;
@@ -38,7 +44,7 @@ Bank* expandDb(Bank* db) {
 	Bank* newDb = new Bank[size + 1];
 
 	for (int i = 0; i < size; i++) {
-		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
+		newDb[i].defineBankAuto(db[i].FIO, db[i].sum);
 		newDb[i].id = i + 1;
 	}
 	newDb[size].id = size + 1;
@@ -55,21 +61,53 @@ void motd() {
 	cout << "Get account info:                     4\n";
 	cout << "Find accounts with deposit more than: 5\n";
 	cout << "Add number to the deposit:            6\n";
-	cout << "Add new accout (experimantal)         7\n";
+	cout << "Testing                               7\n";
 	cout << "Exit:                                 0\n";
 	cout << "\nType a number: ";
+}
+
+void test() {
+	Man pers1 = Man("Brasl", "Petr");
+	Bank bnk;
+	bnk.defineBankAuto(Man("Brasl", "Petr"), 1000);
+	cout << (bnk == pers1);
+
+	pers1.name = "Petr1";
+	cout << (bnk == pers1);
+
+	cout << (pers1 == bnk.getFIO());
+
 }
 
 int main() {
 
 	Bank* db = new Bank[1];
-	FILE* dbFile;
-	fopen_s(&dbFile, DBNAME, "a+");
-	//cout << Bank::count;
+	fstream dbFile;
+	dbFile.open(DBNAME);
 
-	//cout << Bank::count;
+
 	int except = 0;
 
+	string bufSurname;
+	string bufName;
+	double bufSum;
+
+	if (dbFile.is_open()) {
+		for (int i = 0; dbFile.good(); i++) {
+			dbFile >> bufSurname;
+			dbFile >> bufName;
+			dbFile >> bufSum;
+
+			if (i != 0) {
+				db = expandDb(db);
+			}
+
+			db[i].defineBankAuto(Man(bufSurname, bufName), bufSum);
+		}
+	}
+
+	dbFile.close();
+	/*
 	for (int i = 0; !feof(dbFile); i++) {
 
 		char bufName[MAXNAMELEN];
@@ -91,17 +129,17 @@ int main() {
 		fscanf_s(dbFile, "%s", bufName, MAXNAMELEN);
 
 		fscanf_s(dbFile, "%lf", &(bufSum));
-
 		if (i != 0) {
 			db = expandDb(db);
 		}
 
-		db[i].defineBankAuto(bufName, bufSurname, bufSum);
+		db[i].defineBankAuto(Man(bufSurname, bufName), bufSum);
 	}
 	fclose(dbFile);
+	*/
 
 	Bank::dbInfo(db);
-	//cout << "DbLen: " << db[0].surname << endl;
+
 	while (true) {
 		motd();
 		char var;
@@ -114,20 +152,22 @@ int main() {
 
 		int id4 = -1;
 
+		Man iMan4;
+
 		switch (var) {
 		case '1':
-			FILE * dbFile;
+			dbFile.open(DBNAME, ios::out);
 
-			fopen_s(&dbFile, DBNAME, "w");
-
-			for (int i = 0; i < Bank::count; i++)
-			{
-				fprintf(dbFile, "%s ", db[i].getSurname(), MAXNAMELEN);// Было 15 вместо maxnamelen
-				fprintf(dbFile, "%s ", db[i].getName(), MAXNAMELEN);
-				fprintf(dbFile, "%lf", (db[i].sum));
-				if (i != Bank::count - 1) fprintf(dbFile, "\n");
+			if (dbFile.is_open()) {
+				for (int i = 0; i < Bank::count; i++) {
+					dbFile << db[i].getFIO().getSurname() + " ";
+					dbFile << db[i].getFIO().getName() + " ";
+					dbFile << db[i].sum;
+					if (i != Bank::count - 1) dbFile << "\n";
+				}
 			}
-			fclose(dbFile);
+
+			dbFile.close();
 
 			cout << "DB has been successfully saved to hard drive";
 
@@ -139,7 +179,7 @@ int main() {
 
 		case '3':
 
-			if (Bank::count == 1 && strcmp(db[0].getSurname(), "DefaultSurname") == 0) {
+			if (Bank::count == 1 && db[0].getFIO().getSurname() == "DefaultSurname") {
 				cin >> db[0];
 				break;
 			}
@@ -162,8 +202,10 @@ int main() {
 			char name4[MAXNAMELEN];
 			cin >> name4;
 
+			iMan4 = Man(surname4, name4);
+
 			for (int i = 0; i < Bank::count; i++) {
-				if (strcmp(name4, db[i].getName()) == 0 && strcmp(surname4, db[i].getSurname()) == 0) {
+				if (iMan4 == db[i].getFIO()) {
 					found4 = true;
 					db[i].getBankInfo();
 					break;
@@ -193,6 +235,10 @@ int main() {
 
 			cout << "Done!" << endl;
 
+			break;
+
+		case '7':
+			test();
 			break;
 
 		case '0':
