@@ -11,21 +11,17 @@ class Bank {
 public:
 	double sum;
 
-
 	static int count;
 	static int longestName;
 	static int longestSurname;
 
 	int getId();
-	void setId(int num);
 	char* getSurname();
 	char* getName();
 
 	Bank();
 
 	~Bank();
-
-	void defineBankManual();
 
 	void defineBankAuto(char* _name, char* _surname, double _sum);
 
@@ -34,6 +30,10 @@ public:
 	static void dbInfo(Bank* db);
 
 	const void operator + (double num);
+
+	friend void cpyDB(Bank* Don, Bank* Rec, int size);
+
+	friend Bank* expandDb(Bank* db);
 
 	friend istream& operator>> (istream& is, Bank& bnk);
 

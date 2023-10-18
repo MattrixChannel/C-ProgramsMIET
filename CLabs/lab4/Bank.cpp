@@ -9,15 +9,14 @@ using namespace std;
 
 
 int Bank::getId() { return id; };
-void Bank::setId(int num) { id = num; };
 char* Bank::getSurname() { return surname; };
 char* Bank::getName() { return name; };
 
 Bank::Bank() {
 	id = count + 1;
-	name = new char[MAXNAMELEN];
+	name = new char[12];
 	strcpy_s(name, 12, "DefaultName");
-	surname = new char[MAXNAMELEN];
+	surname = new char[15];
 	strcpy_s(surname, 15, "DefaultSurname");
 	sum = 0;
 	count++;
@@ -29,34 +28,19 @@ Bank::~Bank() {
 	count--;
 }
 
-void Bank::defineBankManual() {
-	char buf[MAXNAMELEN];
-
-	cout << "Surname: ";
-	cin >> buf;
-
-	strcpy_s(surname, strlen(buf) + 1, buf);
-
-	if (strlen(buf) > longestSurname) longestSurname = strlen(buf);
-
-	cout << "Name: ";
-	cin >> buf;
-
-	strcpy_s(name, strlen(buf) + 1, buf);
-
-	if (strlen(buf) > longestName) longestName = strlen(buf);
-
-	cout << "Deposit: ";
-	cin >> sum;
-}
-
 void Bank::defineBankAuto(char* _name, char* _surname, double _sum) {
+
+	delete[] surname;
+	surname = new char[strlen(_surname) + 1];
+
 	strcpy_s(surname, strlen(_surname) + 1, _surname);
 
 	if (strlen(_surname) > longestSurname) {
 		longestSurname = strlen(_surname);
 	}
 
+	delete[] name;
+	name = new char[strlen(_name) + 1];
 	strcpy_s(name, strlen(_name) + 1, _name);
 
 	if (strlen(_name) > longestName) {
@@ -90,12 +74,21 @@ const void Bank::operator + (double num) {
 
 istream& operator>> (istream& is, Bank& bnk)
 {
+	char bufSurname[MAXNAMELEN];
+	char bufName[MAXNAMELEN];
+	double bufSum;
+
 	cout << "Surname: ";
-	is >> bnk.name;
+	cin >> bufSurname;
+
 	cout << "Name: ";
-	is >> bnk.surname;
+	cin >> bufName;
+
 	cout << "Deposit: ";
-	is >> bnk.sum;
+	cin >> bufSum;
+
+	bnk.defineBankAuto(bufSurname, bufName, bufSum);
+
 	return is;
 }
 

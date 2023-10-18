@@ -7,26 +7,29 @@
 
 using namespace std;
 
-/*
-1.	Во всех вариантах нужно создать базу данных, согласно варианту задания
-2.	Данные размещаются в динамической памяти.
-3.	Обязательные функции для всех вариантов:
-•	добавить новый элемент в базу
+/* Общие требования к заданиям - LAB 4
+1.	Продолжить работу над проектом
+2.	Создать новый класс и встроить его объект в существующий класс, согласно заданию
+3.	Данные размещаются в динамической памяти.
+4.	Для выполнения функций, указанных в задании, написать диалоговый интерфейс, позволяющий выполнять функции в произвольном порядке многократно
+5.	При выполнении функции «выход из программы» нужно сохранить базу на диске
+6.	Первичное создание базы – ввод данных с клавиатуры
+7.	Если программа уже запускалась, то данные загружаются из файла перед выходом на диалог. Иными словами вносятся изменения и дополнения в уже существующую базу данных.
+8.	Обязательные функции для всех вариантов:
+•	добавить несколько новых элементов в базу
 •	распечатка данных в табличном виде
 •	выход из программы
-4.	Остальные функции для работы с базой указаны в задании индивидуально.
-5.	Для выполнения функций, указанных в задании, написать диалоговый интерфейс, позволяющий выполнять функции в произвольном порядке многократно
-6.	При выполнении функции «выход из программы» нужно сохранить базу на диске
-7.	Первичное создание базы – ввод данных с клавиатуры
-8.	Если программа уже запускалась, то данные загружаются из файла перед выходом на диалог. Иными словами вносятся изменения и дополнения в уже существующую базу данных.
+9.	Остальные функции для работы с базой указаны в задании индивидуально.
+10.	 Примеры диалогового интерфейса и табличного вывода смотрите в лабораторной работе №1
+11.	Перегруженные операторы реализовывать как с помощью дружественной функции (ДФ), так и с помощью метода класса (МК). Если в задании не указан метод реализации – решаете по своему усмотрению.
 */
 
 void cpyDB(Bank* Don, Bank* Rec, int size) {
 	for (int i = 0; i < size; i++) {
 		Rec[i].defineBankAuto(Don[i].getName(), Don[i].getSurname(), Don[i].sum);
-		Rec[i].setId(i + 1);
+		Rec[i].id = i + 1;
 	}
-	Rec[size].setId(size + 1);
+	Rec[size].id = size + 1;
 }
 
 Bank* expandDb(Bank* db) {
@@ -36,9 +39,9 @@ Bank* expandDb(Bank* db) {
 
 	for (int i = 0; i < size; i++) {
 		newDb[i].defineBankAuto(db[i].getName(), db[i].getSurname(), db[i].sum);
-		newDb[i].setId(i + 1);
+		newDb[i].id = i + 1;
 	}
-	newDb[size].setId(size + 1);
+	newDb[size].id = size + 1;
 
 	delete[] db;
 	return newDb;
@@ -125,23 +128,32 @@ int main() {
 				if (i != Bank::count - 1) fprintf(dbFile, "\n");
 			}
 			fclose(dbFile);
+
+			cout << "DB has been successfully saved to hard drive";
+
 			break;
+
 		case '2':
 			Bank::dbInfo(db);
 			break;
+
 		case '3':
-			//cout << Bank::count;
+
+			if (Bank::count == 1 && strcmp(db[0].getSurname(), "DefaultSurname") == 0) {
+				cin >> db[0];
+				break;
+			}
 
 			db = expandDb(db);
 
 			cout << endl;
 
-			//cout << Bank::count << ' ' << db[0].getName();
-			db[Bank::count - 1].defineBankManual();
+			cin >> db[Bank::count - 1];
 
 			cout << "\nBank has been succesfully added to data base" << endl;
+
 			break;
-			cout << Bank::count;
+
 		case '4':
 			cout << "Enter Surname: ";
 			char surname4[MAXNAMELEN];
@@ -161,6 +173,7 @@ int main() {
 			if (!found4) cout << "\nNot found\n";
 
 			break;
+
 		case '5':
 			cout << "Enter a number, accounts with deposit higher than it will be shown:" << endl;
 			cin >> sum5;
@@ -168,6 +181,7 @@ int main() {
 			Bank::getAccsWithDepositMoreThan(db, sum5);
 
 			break;
+
 		case '6':
 			cout << "Enter a client id: ";
 			cin >> id6;
@@ -181,18 +195,6 @@ int main() {
 
 			break;
 
-		case '7':
-			//cout << Bank::count;
-			db = expandDb(db);
-
-			cout << endl;
-
-			//cout << Bank::count << ' ' << db[0].getName();
-			cin >> db[Bank::count - 1];
-
-			cout << "\nBank has been succesfully added to data base" << endl;
-
-			break;
 		case '0':
 			//cout << Bank::count;
 			delete[] db;
