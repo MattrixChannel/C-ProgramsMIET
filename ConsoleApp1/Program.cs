@@ -261,7 +261,9 @@ namespace ConsoleApp1
             Console.WriteLine();
             Console.WriteLine("D " + FirstStudent);
 
-
+            StudentCollection<string> coll = new StudentCollection<string>((Student student) => DateTime.Now.Millisecond.ToString());
+            coll.AddDefaults();
+            Console.WriteLine(coll.ToString());
 
             Console.ReadKey();
         }

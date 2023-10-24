@@ -15,6 +15,7 @@ namespace ConsoleApp1
         internal StudentCollection(KeySelector<TKey> keySelector)
         {
             this.keySelector = keySelector;
+            dict = new Dictionary<TKey, Student>();
         }
 
         public void AddDefaults()
