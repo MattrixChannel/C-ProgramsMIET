@@ -8,28 +8,28 @@ namespace ConsoleApp1
 {
     internal class Test
     {
-        public string name { get; set; }
-        public bool pass { get; set; }
+        public string Name { get; set; }
+        public bool Pass { get; set; }
 
         internal Test()
         {
-            this.name = "Sample Name";
-            this.pass = true;
+            this.Name = "Sample Name";
+            this.Pass = true;
         }
         internal Test(string name, bool pass)
         {
-            this.name = name;
-            this.pass = pass;
+            this.Name = name;
+            this.Pass = pass;
         }
 
         public override string ToString()
         {
-            return name + " " + pass;
+            return Name + " " + Pass;
         }
 
         public object DeepCopy()
         {
-            return new Test(name, pass);
+            return new Test(Name, Pass);
         }
     }
 }

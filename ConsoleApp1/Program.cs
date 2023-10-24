@@ -13,9 +13,10 @@ namespace ConsoleApp1
         DateTime Date { get; set; }
     }
 
+    delegate KeyValuePair<TKey, TValue> GenerateElement<TKey, TValue>(int j);
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             /* Testing
               
@@ -99,6 +100,7 @@ namespace ConsoleApp1
             Console.ReadKey();
             //*/
 
+            /* Lab2 Program
             // 1 Создать два объекта типа Person с совпадающими данными и
             // проверить, что ссылки на объекты не равны, а объекты равны, вывести
             // значения хэш-кодов для объектов.
@@ -131,7 +133,7 @@ namespace ConsoleApp1
             Console.WriteLine();
             // 3 Вывести значение свойства типа Person для объекта типа Student.
             Console.WriteLine("N3");
-            Console.WriteLine(FirstStudent.person);
+            Console.WriteLine(FirstStudent.Person);
 
             Console.WriteLine();
             Console.WriteLine();
@@ -142,9 +144,9 @@ namespace ConsoleApp1
             Console.WriteLine("N4");
 
             Student SecondStudent = FirstStudent.DeepCopy() as Student;
-            FirstStudent.name = "Peter";
+            FirstStudent.Name = "Peter";
             //FirstStudent.exam[0].name = "NEWNAME";
-            exams[0].name = "NEWNAMEeeee";
+            exams[0].Name = "NEWNAMEeeee";
             Console.WriteLine(FirstStudent.ToString() + "\n\n" + SecondStudent.ToString());
 
             Console.WriteLine();
@@ -155,7 +157,7 @@ namespace ConsoleApp1
             Console.WriteLine("N5");
             try
             {
-                FirstStudent.group = 1;
+                FirstStudent.Group = 1;
             }
             catch (Exception e)
             {
@@ -222,6 +224,44 @@ namespace ConsoleApp1
             {
                 Console.WriteLine(i.ToString());
             }
+            */
+
+            Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
+
+
+            foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
+            Array.Sort(exams, Exam.SortDate());
+            Console.WriteLine();
+            foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            Student FirstStudent = new Student();
+  
+            //Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 1, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+            Test[] tests = { new Test("Art", false), new Test("PE", true), new Test("IT", false), new Test("Math", true) };
+            FirstStudent.AddExams(exams);
+            FirstStudent.AddTests(tests);
+
+            Console.WriteLine("A " + FirstStudent);
+
+            FirstStudent.SortExamsName();
+
+            Console.WriteLine();
+            Console.WriteLine("B " + FirstStudent);
+
+            FirstStudent.SortExamsMark();
+
+            Console.WriteLine();
+            Console.WriteLine("C " + FirstStudent);
+
+            FirstStudent.SortExamsDate();
+
+            Console.WriteLine();
+            Console.WriteLine("D " + FirstStudent);
+
+
 
             Console.ReadKey();
         }

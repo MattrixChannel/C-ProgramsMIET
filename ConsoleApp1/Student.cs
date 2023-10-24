@@ -16,7 +16,7 @@ namespace ConsoleApp1
         private List<Exam> _exam;
         private List<Test> _test;
 
-        internal Student(Person person, Education education, int group) : base(person.name, person.surname, person.birthday)
+        internal Student(Person person, Education education, int group) : base(person.Name, person.Surname, person.Birthday)
         {
             _education = education;
             _group = group;
@@ -32,7 +32,7 @@ namespace ConsoleApp1
             _test = new List<Test>();
         }
 
-        public Person person
+        public Person Person
         {
             get { return base.DeepCopy() as Person; }
             set
@@ -40,21 +40,21 @@ namespace ConsoleApp1
 
                 if (value.GetType() == typeof(Person))
                 {
-                    name = (value as Person).name; // !!!!!!!!!!
-                    surname = (value as Person).surname;
-                    birthday = (value as Person).birthday;
+                    Name = (value as Person).Name; // !!!!!!!!!!
+                    Surname = (value as Person).Surname;
+                    Birthday = (value as Person).Birthday;
                 }
 
                 else
                 {
-                    name = base.name;
-                    surname = base.surname;
-                    birthday = base.birthday;
+                    Name = base.Name;
+                    Surname = base.Surname;
+                    Birthday = base.Birthday;
                 }
             }
         }
-        public Education education { get { return _education; } set { _education = value; } }
-        public int group
+        public Education Education { get { return _education; } set { _education = value; } }
+        public int Group
         {
             get { return _group; }
             set
@@ -76,10 +76,10 @@ namespace ConsoleApp1
                 }
             }
         }
-        public List<Exam> exam { get { return _exam; } set { _exam = value; } }
-        public List<Test> test { get { return _test; } set { _test = value; } }
+        public List<Exam> _Exam { get { return _exam; } set { _exam = value; } }
+        public List<Test> _Test { get { return _test; } set { _test = value; } }
 
-        public double avrMark
+        public double AvrMark
         {
             get
             {
@@ -88,7 +88,7 @@ namespace ConsoleApp1
                 for (int i = 0; i < _exam.Count; i++)
                 {
                     marksCount++;
-                    marksSum += exam[i].mark;
+                    marksSum += _Exam[i].Mark;
                 }
                 return marksSum / marksCount;
             }
@@ -97,7 +97,7 @@ namespace ConsoleApp1
         {
             get
             {
-                if (educ == education) return true;
+                if (educ == Education) return true;
                 else return false;
             }
         }
@@ -106,36 +106,36 @@ namespace ConsoleApp1
         {
             for (int i = 0; i < exams.Length; i++)
             {
-                exam.Add(exams[i].DeepCopy() as Exam);
+                _Exam.Add(exams[i].DeepCopy() as Exam);
             }
         }
         public void AddTests(Test[] tests)
         {
             for (int i = 0; i < tests.Length; i++)
             {
-                test.Add(tests[i].DeepCopy() as Test);
+                _Test.Add(tests[i].DeepCopy() as Test);
             }
         }
 
         public override string ToString()
         {
-            string res = $"{person.ToString()}\n{education}\n{group}";
+            string res = $"{Person}\n{Education}\n{Group}";
 
-            for (int i = 0; i < exam.Count; i++)
+            for (int i = 0; i < _Exam.Count; i++)
             {
-                res += $"\n{exam[i].ToString()}";
+                res += $"\n{_Exam[i]}";
             }
 
-            for (int i = 0; i < test.Count; i++)
+            for (int i = 0; i < _Test.Count; i++)
             {
-                res += $"\n{test[i].ToString()}";
+                res += $"\n{_Test[i]}";
             }
             return res;
         }
 
         public override string ToShortString()
         {
-            return $"{person.ToString()}\n{education}\n{group}\n{avrMark}";
+            return $"{Person}\n{Education}\n{Group}\n{AvrMark}";
         }
         public override bool Equals(object obj)
         {
@@ -144,13 +144,13 @@ namespace ConsoleApp1
 
         private bool Equal(Student stud)
         {
-            if (person != stud.person || education != stud.education || group != stud.group || exam.Count != stud.exam.Count)
+            if (Person != stud.Person || Education != stud.Education || Group != stud.Group || _Exam.Count != stud._Exam.Count)
             {
                 return false;
             }
-            for (int i = 0; i < exam.Count; i++)
+            for (int i = 0; i < _Exam.Count; i++)
             {
-                if (exam[i] != stud.exam[i])
+                if (_Exam[i] != stud._Exam[i])
                 {
                     return false;
                 }
@@ -171,19 +171,19 @@ namespace ConsoleApp1
 
         public override int GetHashCode()
         {
-            int res = person.GetHashCode() + group.GetHashCode() + education.GetHashCode();
-            for (int i = 0; i < exam.Count; i++)
+            int res = Person.GetHashCode() + Group.GetHashCode() + Education.GetHashCode();
+            for (int i = 0; i < _Exam.Count; i++)
             {
-                res += exam[i].GetHashCode();
+                res += _Exam[i].GetHashCode();
             }
             return res;
         }
 
         public override object DeepCopy()
         {
-            Student newStud = new Student(person.DeepCopy() as Person, education, group);
-            newStud.AddExams(exam.ToArray());
-            newStud.AddTests(test.ToArray());
+            Student newStud = new Student(Person.DeepCopy() as Person, Education, Group);
+            newStud.AddExams(_Exam.ToArray());
+            newStud.AddTests(_Test.ToArray());
             return newStud;
         }
         //public DateTime Date { get { return person.birthday; } set { person.birthday = value; } }
@@ -200,23 +200,23 @@ namespace ConsoleApp1
 
         public IEnumerable<Exam> GetEnumeratorWithMark(int mark)
         {
-            for (int i = 0; i < exam.Count; i++)
+            for (int i = 0; i < _Exam.Count; i++)
             {
-                if (exam[i].mark > mark)
+                if (_Exam[i].Mark > mark)
                 {
-                    yield return exam[i];
+                    yield return _Exam[i];
                 }
             }
         }
 
         public IEnumerable GetEnumeratorInExamAndTest()
         {
-            foreach(var i in exam)
+            foreach (var i in _Exam)
             {
-                foreach(var j in test)
+                foreach (var j in _Test)
                 {
-                    if (i.name == j.name)
-                    yield return i;
+                    if (i.Name == j.Name)
+                        yield return i;
                 }
             }
         }
@@ -228,9 +228,9 @@ namespace ConsoleApp1
                 yield return i;
             }
 
-            foreach(var i in test)
+            foreach (var i in _Test)
             {
-                if (i.pass)
+                if (i.Pass)
                 {
                     yield return i;
                 }
@@ -239,11 +239,11 @@ namespace ConsoleApp1
 
         public IEnumerable GetEnumeratorExamAndTestPassed()
         {
-            foreach (var j in test)
+            foreach (var j in _Test)
             {
-                foreach (var i in exam)
+                foreach (var i in _Exam)
                 {
-                    if (i.name == j.name && i.mark > 2 && j.pass)
+                    if (i.Name == j.Name && i.Mark > 2 && j.Pass)
                         yield return j;
                 }
             }
@@ -253,6 +253,23 @@ namespace ConsoleApp1
         {
             return new StudentEnum(_exam, _test);
         }
+
+        public void SortExamsName()
+        {
+            _exam.Sort((x1, x2) => x1.CompareTo(x2));
+        }
+
+        public void SortExamsMark()
+        {
+            _exam.Sort((x1, x2) => x1.Mark.CompareTo(x2.Mark));
+        }
+
+        public void SortExamsDate()
+        {
+            _exam.Sort(Exam.SortDate());
+        }
+
+
     }
 
 }

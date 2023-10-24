@@ -1,34 +1,36 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ConsoleApp1
 {
-    internal class Exam
+    internal class Exam : IComparable, IComparer<Exam>
     {
-        public string name { get; set; }
-        public int mark { get; set; }
-        public DateTime date { get; set; }
+        public string Name { get; set; }
+        public int Mark { get; set; }
+        public DateTime Date { get; set; }
 
         internal Exam(string _name, int _mark, DateTime _date)
         {
-            name = _name;
-            mark = _mark;
-            date = _date;
+            Name = _name;
+            Mark = _mark;
+            Date = _date;
         }
         internal Exam()
         {
-            name = "Math";
-            mark = 1;
-            date = DateTime.Now;
+            Name = "Math";
+            Mark = 1;
+            Date = DateTime.Now;
         }
 
         public override string ToString()
         {
-            return $"{name} {mark} {date}";
+            return $"{Name} {Mark} {Date}";
         }
 
         public override bool Equals(object obj)
@@ -38,7 +40,7 @@ namespace ConsoleApp1
 
         private bool Equal(Exam ex)
         {
-            if (name == ex.name && mark == ex.mark && date == ex.date) { return true; }
+            if (Name == ex.Name && Mark == ex.Mark && Date == ex.Date) { return true; }
             return false;
         }
 
@@ -54,12 +56,38 @@ namespace ConsoleApp1
 
         public override int GetHashCode()
         {
-            return name.GetHashCode() + mark.GetHashCode() + date.GetHashCode();
+            return Name.GetHashCode() + Mark.GetHashCode() + Date.GetHashCode();
         }
 
         public object DeepCopy()
         {
-            return new Exam(name, mark, date);
+            return new Exam(Name, Mark, Date);
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Name.CompareTo((obj as Exam).Name);
+        }
+
+        public int Compare(Exam x, Exam y)
+        {
+            if (x.Mark <  y.Mark) { return -1; }
+            if (x.Mark == y.Mark) { return 0; }
+            else return 1;
+        }
+
+
+        private class ExamCompareDate : IComparer<Exam>
+        {
+            public int Compare(Exam x, Exam y)
+            {
+                return DateTime.Compare(x.Date, y.Date);
+            }
+        }
+
+        public static IComparer<Exam> SortDate()
+        {
+            return new ExamCompareDate();
         }
     }
 }

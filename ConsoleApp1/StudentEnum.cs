@@ -14,11 +14,11 @@ namespace ConsoleApp1
         public List<Test> _test;
 
         private int Size { get { return _exam.Count + _test.Count; } }
-        private int examSize { get { return _exam.Count; } }
-        private int testSize { get { return _test.Count; } }
+        private int ExamSize { get { return _exam.Count; } }
+        //private int testSize { get { return _test.Count; } }
 
-        private bool inExam { get { if(position >= examSize) return false; return true; } }
-        private bool inTest { get { if(position >= examSize) return true; return false; } }
+        //private bool inExam { get { if(position >= examSize) return false; return true; } }
+        //private bool inTest { get { if(position >= examSize) return true; return false; } }
 
         int position = -1;
 
@@ -53,8 +53,8 @@ namespace ConsoleApp1
             {
                 try
                 {
-                    if(position < examSize) return _exam[position];
-                    else return _test[position - examSize];
+                    if(position < ExamSize) return _exam[position];
+                    else return _test[position - ExamSize];
                 }
                 catch (IndexOutOfRangeException)
                 {

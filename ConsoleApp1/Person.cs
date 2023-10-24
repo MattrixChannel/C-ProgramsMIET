@@ -26,13 +26,13 @@ namespace ConsoleApp1
             _birthday = DateTime.Today;
         }
 
-        public string name
+        public string Name
         {
             get => _name;
             set => _name = value;
         }
 
-        public string surname
+        public string Surname
         {
             get { return _surName; }
             set
@@ -41,13 +41,13 @@ namespace ConsoleApp1
             }
         }
         
-        public System.DateTime birthday
+        public System.DateTime Birthday
         {
             get => _birthday;
             set => _birthday = value;
         }
 
-        public int birthdayYear
+        public int BirthdayYear
         {
             get => _birthday.Year;
             set
@@ -73,7 +73,7 @@ namespace ConsoleApp1
 
         private bool Equal(Person pers)
         {
-            if (name == pers.name && surname == pers.surname && birthday == pers.birthday) { return true; }
+            if (Name == pers.Name && Surname == pers.Surname && Birthday == pers.Birthday) { return true; }
             return false;
         }
 
@@ -89,14 +89,14 @@ namespace ConsoleApp1
 
         public override int GetHashCode()
         {
-            return name.GetHashCode() + surname.GetHashCode() + birthday.GetHashCode();
+            return Name.GetHashCode() + Surname.GetHashCode() + Birthday.GetHashCode();
         }
 
         public virtual object DeepCopy()
         {
-            return new Person(name, surname, birthday);
+            return new Person(Name, Surname, Birthday);
         }
 
-        public DateTime Date { get { return birthday; } set { birthday = value; } }
+        public DateTime Date { get { return Birthday; } set { Birthday = value; } }
     }
 }
