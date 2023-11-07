@@ -18,8 +18,8 @@ namespace ConsoleApp1
     {
         static void Main()
         {
-            /* Testing
-              
+            //* Testing
+              /*
             Person a = new Person("Peter", "Brasl", DateTime.Now);
             Person b = a.DeepCopy() as Person;
             Console.WriteLine(a.ToString());
@@ -226,6 +226,7 @@ namespace ConsoleApp1
             }
             */
 
+            //*
             Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
 
 
@@ -259,11 +260,51 @@ namespace ConsoleApp1
             FirstStudent.SortExamsDate();
 
             Console.WriteLine();
-            Console.WriteLine("D " + FirstStudent);
+            Console.WriteLine("D " + FirstStudent + "\n");
 
-            StudentCollection<string> coll = new StudentCollection<string>((Student student) => DateTime.Now.Millisecond.ToString());
+            StudentCollection<int> coll = new StudentCollection<int>((Student student) => student.GetHashCode());
             coll.AddDefaults();
-            Console.WriteLine(coll.ToString());
+
+            
+            Console.WriteLine("Collection: \n" + coll.ToString());
+
+            Student[] studs = { new Student(), new Student(), new Student() };
+            studs[0].Person = new Person("FirstName", "FirstSurname", new DateTime(2004, 4, 30));
+            studs[0].AddExams(exams);
+            studs[0].AddTests(tests);
+            studs[1].Person = new Person("SecondName", "SecondsSurname", new DateTime(2011, 10, 5));
+            studs[0].Education = Education.Specialist;
+            studs[2].Person = new Person("ThirdName", "ThirSurname", new DateTime(2013, 12, 25));
+            studs[2].Education = Education.Specialist;
+            Console.WriteLine(studs[0].Person.Name + " " + studs[1].Person.Name);
+
+            coll.AddStudents(studs);
+
+            Console.WriteLine();
+            Console.WriteLine("Collection 2: \n" + coll.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine("Collection 2 ToShortString: \n" + coll.ToShortString());
+
+            Console.WriteLine();
+            Console.WriteLine("Max average mark: " + coll.MaxAvr);
+
+            Console.WriteLine();
+            Console.WriteLine("Specialists:");
+            foreach (var i in coll.EducationForm(Education.Specialist))
+            {
+                Console.WriteLine(i.Value.ToString());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Grouped:");
+            foreach (var i in coll.GroupedByEducation())
+            {
+                foreach (var j in i.ToArray())
+                Console.WriteLine(j.ToString());
+            }
+            
+
 
             Console.ReadKey();
         }

@@ -31,5 +31,10 @@ namespace ConsoleApp1
         {
             return new Test(Name, Pass);
         }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() + Pass.GetHashCode();
+        }
     }
 }

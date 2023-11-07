@@ -83,6 +83,10 @@ namespace ConsoleApp1
         {
             get
             {
+                if (_exam.Count == 0)
+                {
+                    return 0;
+                }
                 int marksCount = 0;
                 double marksSum = 0;
                 for (int i = 0; i < _exam.Count; i++)
@@ -135,7 +139,7 @@ namespace ConsoleApp1
 
         public override string ToShortString()
         {
-            return $"{Person}\n{Education}\n{Group}\n{AvrMark}";
+            return $"{Person}\n{Education}\n{Group}\n{AvrMark}\n{_Exam.Count}\n{_Test.Count}";
         }
         public override bool Equals(object obj)
         {
@@ -175,6 +179,10 @@ namespace ConsoleApp1
             for (int i = 0; i < _Exam.Count; i++)
             {
                 res += _Exam[i].GetHashCode();
+            }
+            for (int i = 0; i < _Test.Count; i++)
+            {
+                res += _Test[i].GetHashCode();
             }
             return res;
         }
