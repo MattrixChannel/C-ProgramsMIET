@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Student.h"
 #include "Teacher.h"
+#include <windows.h>
 
 /*
 Общие требования выполнения работы
@@ -40,12 +41,13 @@ void motd() {
 	std::cout << "Показать список:                      2\n";
 	std::cout << "Добавить новую запись:                3\n";
 	std::cout << "Получить информацию:                  4\n";
-	std::cout << "Testing                               7\n";
 	std::cout << "Выход:                                0\n";
 	std::cout << "\nЧисло: ";
 }
 
 int main() {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "Russian");
 
 	std::vector <Student> Students;
@@ -71,7 +73,6 @@ int main() {
 	std::string bufSurname;
 	std::string bufString;
 	int bufInt;
-	department bufDep;
 	std::string type;
 
 	if (dbFile.is_open()) {
@@ -91,9 +92,17 @@ int main() {
 
 	dbFile.close();
 
-	std::cout << Teachers[0].ToShortString() << std::endl << Teachers[1].ToShortString() << std::endl;
-
-	while (false) {
+	Student::GetInfo(Students);
+	std::cout << std::endl;
+	Teacher::GetInfo(Teachers);
+	/*
+	std::string a;
+	std::cin >> a;
+	std::cout << a;*/
+	//Man a;
+	//std::cin >> a;
+	//std::cout << a.ToShortString();
+	while (true) {
 		motd();
 		char var;
 		std::cin >> var;
@@ -101,41 +110,55 @@ int main() {
 		std::string name3;
 		std::string surname3;
 		std::string string3;
-		int num3;
+		Teacher tech3;
+		Student stud3;
 
+		char type4;
+		std::string name4;
+		std::string surname4;
+		Man Man4;
+		bool found4 = false;
 
 		switch (var) {
 		case '1':
+			dbFile.open(dbFileName);
 
+			if (dbFile.is_open()) {
+				for (int i = 0; i < Teachers.size(); i++) {
+					dbFile << "T ";
+					dbFile << Teachers[i].ToShortString();
+					if (i != Teachers.size() - 1 || Students.size() != 0) dbFile << "\n";
+				}
+
+				for (int i = 0; i < Students.size(); i++) {
+					dbFile << "S ";
+					dbFile << Students[i].ToShortString();
+					if (i != Students.size() - 1) dbFile << "\n";
+				}
+			}
+
+			dbFile.close();
 			break;
 
 		case '2':
+			Student::GetInfo(Students);
+			std::cout << std::endl;
+			Teacher::GetInfo(Teachers);
 			break;
 
 		case '3':
+
 			std::cout << "Напишите T чтобы добавить учителя \nS чтобы добавить студента: ";
 			std::cin >> type3;
 			if (type3 == "T" || type3 == "Т") {
-				std::cout << "Введите имя: ";
-				std::cin >> name3;
-				std::cout << "Введите фамилию: ";
-				std::cin >> surname3;
-				std::cout << "Введите преподаваемый курс: ";
-				std::cin >> string3; 
-				std::cout << "Введите кафедру (0 = spintex, 1 = bms, 2 = pkims): ";
-				std::cin >> num3;// spintex, bms, pkims
-				Teachers.push_back(Teacher(Man(name3, surname3), string3, static_cast<department>(num3)));
+				std::cin >> tech3;
+				Teachers.push_back(tech3);
 				std::cout << "Запись успешно добавлена";
 				break;
 			}
 			else if (type3 == "S") {
-				std::cout << "Введите имя: ";
-				std::cin >> name3;
-				std::cout << "Введите фамилию: ";
-				std::cin >> surname3;
-				std::cout << "Введите номер группы: ";
-				std::cin >> num3;// spintex, bms, pkims
-				Students.push_back(Student(Man(name3, surname3), num3));
+				std::cin >> stud3;
+				Students.push_back(stud3);
 				std::cout << "Запись успешно добавлена";
 				break;
 			}
@@ -146,21 +169,36 @@ int main() {
 			break;
 
 		case '4':
+			std::cout << "Вы хотите найти учителя или студента? (T/S): ";
+			std::cin >> type4;
+			if (type4 != 'T' && type4 != 'S') {
+				std::cout << "Неизвестный символ\n";
+				break;
+			}
+			std::cin >> Man4;
+			//std::cout << name4 << "\n";
+			if (type4 == 'T') {
+				for (int i = 0; i < Teachers.size(); i++) {
+					if (Teachers[i] == Man4) {
+						found4 = true;
+						std::cout << "\nНайдена запись: \n" << Teachers[i].ToString() << std::endl;
+						break;
+					}
+				}
+			}
+			if (type4 == 'S') {
+				for (int i = 0; i < Students.size(); i++) {
+					if (Students[i] == Man4) {
+						found4 = true;
+						std::cout << "\nНайдена запись: \n" << Students[i].ToShortString() << std::endl;
+						break;
+					}
+				}
+			}
+
+			if (!found4) std::cout << "\nNot found\n";
 
 			break;
-
-		case '5':
-
-			break;
-
-		case '6':
-
-			break;
-
-		case '7':
-
-			break;
-
 		case '0':
 			//cout << Bank::count;
 

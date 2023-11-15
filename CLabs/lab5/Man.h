@@ -10,5 +10,6 @@ public:
 	Man(std::string name, std::string surname);
 	std::string ToShortString();
 
-	
+
+	friend std::istream& operator>> (std::istream& is, Man& man);
 };
