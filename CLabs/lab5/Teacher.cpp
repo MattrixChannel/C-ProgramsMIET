@@ -51,11 +51,6 @@ std::string departmentToString(department dep)
 	}
 }
 
-const bool Teacher::operator == (Man manr) {
-	if (nameSurname.ToShortString() == manr.ToShortString()) return true;
-	else return false;
-}
-
 std::istream& operator>> (std::istream& is, Teacher& tech)
 {
 	is >> tech.nameSurname;

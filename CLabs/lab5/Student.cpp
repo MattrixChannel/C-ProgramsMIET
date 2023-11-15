@@ -3,7 +3,12 @@
 
 std::string Student::ToShortString()
 {
-    return (nameSurname.ToShortString() + " " + std::to_string(group));
+    return nameSurname.ToShortString() + " " + std::to_string(group);
+}
+
+std::string Student::ToString()
+{
+    return ToShortString();
 }
 
 Student::Student()
@@ -28,11 +33,6 @@ void Student::GetInfo(std::vector<Student> db)
 std::string const Student::GetNameFam()
 {
     return nameSurname.ToShortString();
-}
-
-const bool Student::operator == (Man manr) {
-    if (nameSurname.ToShortString() == manr.ToShortString()) return true;
-    else return false;
 }
 
 std::istream& operator>> (std::istream& is, Student& stud)

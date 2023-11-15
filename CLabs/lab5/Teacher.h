@@ -9,7 +9,6 @@ std::string departmentToString(department dep);
 
 class Teacher : public Common
 {
-	Man nameSurname;
 	std::string course;
 	enum department dep;
 
@@ -19,11 +18,9 @@ public:
 
 	std::string const GetNameFam();
 	std::string ToShortString() override;
-	std::string ToString();
+	std::string ToString() override;
 
 	static void GetInfo(std::vector <Teacher> db);
-
-	const bool operator == (Man manr);
 
 	friend std::istream& operator>> (std::istream& is, Teacher& tech);
 };

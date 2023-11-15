@@ -1,11 +1,15 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "Man.h"
 
 class Common {
 
 public:
-	virtual std::string ToShortString();
+	Man nameSurname;
+	virtual std::string ToShortString() = 0;
+	virtual std::string ToString() = 0;
+	void search(std::string fam) {};
 
-	//static virtual void GetInfo(std::vector <int> db);
+	const bool operator == (Man manr);
 };

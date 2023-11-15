@@ -199,6 +199,8 @@ int main() {
 			if (!found4) std::cout << "\nNot found\n";
 
 			break;
+
+
 		case '0':
 			//cout << Bank::count;
 
