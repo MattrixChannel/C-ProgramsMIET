@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -9,12 +11,16 @@ using System.Xml.Schema;
 
 namespace ConsoleApp1
 {
-    internal class Student : Person, IEnumerable
+    delegate void StudentsChangedHandler<TKey> (object source, StudentsChangedEventArgs<TKey> args);
+
+    internal class Student : Person, IEnumerable, System.ComponentModel.INotifyPropertyChanged
     {
         private Education _education;
         private int _group;
         private List<Exam> _exam;
         private List<Test> _test;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         internal Student(Person person, Education education, int group) : base(person.Name, person.Surname, person.Birthday)
         {
@@ -68,6 +74,7 @@ namespace ConsoleApp1
                     else
                     {
                         _group = value;
+                        PropertyChanged.Invoke(this, new PropertyChangedEventArgs("group"));
                     }
                 }
                 catch (Exception e)

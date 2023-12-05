@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
+    delegate void StudentsChangedHandler<TKey>(object source, StudentsChangedEventArgs<TKey> args);
     delegate TKey KeySelector<TKey>(Student st);
     internal class StudentCollection<TKey>
     {
+        public string Name { get; set; }
         private Dictionary<TKey, Student> dict;
         private KeySelector<TKey> keySelector;
 
@@ -67,5 +69,20 @@ namespace ConsoleApp1
             }
             return res;
         }
+
+        public bool Remove(Student st)
+        {
+            if (dict.Remove(keySelector(st)))
+            {
+                StudentsChangedHandler<TKey> studentRemoved = StudentsChanged;
+                studentRemoved?.Invoke(this, new StudentsChangedEventArgs<TKey>("Student", Action.Remove, "Student", keySelector(st)));
+                return true;
+            }
+            else { return false; }
+        }
+
+        public event StudentsChangedHandler<TKey> StudentsChanged;
     }
+    
+
 }

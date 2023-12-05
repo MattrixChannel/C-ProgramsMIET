@@ -226,7 +226,7 @@ namespace ConsoleApp1
             }
             */
 
-            //*
+            /* Lab3 Program
             Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
 
             //foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
@@ -317,7 +317,9 @@ namespace ConsoleApp1
             //Console.WriteLine(genElem(0).Value.ToShortString());
             TestCollections<Person, Student> testcoll = new TestCollections<Person, Student> (50, genElem);
             testcoll.Search();
-            
+            */
+
+
             Console.ReadKey();
         }
     }
