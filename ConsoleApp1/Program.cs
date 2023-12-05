@@ -13,7 +13,7 @@ namespace ConsoleApp1
         DateTime Date { get; set; }
     }
 
-    delegate KeyValuePair<TKey, TValue> GenerateElement<TKey, TValue>(int j);
+    
     internal class Program
     {
         static void Main()
@@ -229,14 +229,10 @@ namespace ConsoleApp1
             //*
             Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
 
-
-            foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
-            Array.Sort(exams, Exam.SortDate());
-            Console.WriteLine();
-            foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
-
-            Console.WriteLine();
-            Console.WriteLine();
+            //foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
+            //Array.Sort(exams, Exam.SortDate());
+            //Console.WriteLine();
+            //foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
 
             Student FirstStudent = new Student();
   
@@ -245,28 +241,32 @@ namespace ConsoleApp1
             FirstStudent.AddExams(exams);
             FirstStudent.AddTests(tests);
 
+            Console.WriteLine("\n============ До сортировки");
             Console.WriteLine("A " + FirstStudent);
 
             FirstStudent.SortExamsName();
 
             Console.WriteLine();
+            Console.WriteLine("\n============ Сортировка по названию");
             Console.WriteLine("B " + FirstStudent);
 
             FirstStudent.SortExamsMark();
 
             Console.WriteLine();
+            Console.WriteLine("\n============ Сортировка по оценке");
             Console.WriteLine("C " + FirstStudent);
 
             FirstStudent.SortExamsDate();
 
             Console.WriteLine();
+            Console.WriteLine("\n============ Сортировка по дате");
             Console.WriteLine("D " + FirstStudent + "\n");
 
             StudentCollection<int> coll = new StudentCollection<int>((Student student) => student.GetHashCode());
             coll.AddDefaults();
 
             
-            Console.WriteLine("Collection: \n" + coll.ToString());
+            //Console.WriteLine("Collection: \n" + coll.ToString());
 
             Student[] studs = { new Student(), new Student(), new Student() };
             studs[0].Person = new Person("FirstName", "FirstSurname", new DateTime(2004, 4, 30));
@@ -276,20 +276,23 @@ namespace ConsoleApp1
             studs[0].Education = Education.Specialist;
             studs[2].Person = new Person("ThirdName", "ThirSurname", new DateTime(2013, 12, 25));
             studs[2].Education = Education.Specialist;
-            Console.WriteLine(studs[0].Person.Name + " " + studs[1].Person.Name);
+            //Console.WriteLine(studs[0].Person.Name + " " + studs[1].Person.Name);
 
             coll.AddStudents(studs);
 
             Console.WriteLine();
-            Console.WriteLine("Collection 2: \n" + coll.ToString());
+            Console.WriteLine("\n============ Коллекция студентов:");
+            Console.WriteLine("Collection: \n" + coll.ToString());
+
+            //Console.WriteLine();
+            //Console.WriteLine("Collection 2 ToShortString: \n" + coll.ToShortString());
 
             Console.WriteLine();
-            Console.WriteLine("Collection 2 ToShortString: \n" + coll.ToShortString());
-
-            Console.WriteLine();
+            Console.WriteLine("\n============ Максимальное среднее значение:");
             Console.WriteLine("Max average mark: " + coll.MaxAvr);
 
             Console.WriteLine();
+            Console.WriteLine("\n============ Группировка по специалистам:");
             Console.WriteLine("Specialists:");
             foreach (var i in coll.EducationForm(Education.Specialist))
             {
@@ -297,15 +300,24 @@ namespace ConsoleApp1
             }
 
             Console.WriteLine();
+            Console.WriteLine("\n============ Группировка по образованиям:");
             Console.WriteLine("Grouped:");
             foreach (var i in coll.GroupedByEducation())
             {
                 foreach (var j in i.ToArray())
                 Console.WriteLine(j.ToString());
             }
+
+            KeyValuePair<Person, Student> genElem(int number)
+            {
+                Person pers = new Person($"{number}", "", DateTime.Now);
+                Student stud = new Student(pers, Education.Specialist, 0);
+                return new KeyValuePair<Person, Student>(pers, stud);
+            }
+            //Console.WriteLine(genElem(0).Value.ToShortString());
+            TestCollections<Person, Student> testcoll = new TestCollections<Person, Student> (50, genElem);
+            testcoll.Search();
             
-
-
             Console.ReadKey();
         }
     }
