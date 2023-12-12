@@ -17,12 +17,19 @@ public:
 
 	static bool has_number(const std::string& s)
 	{
+		/*
 		std::string::const_iterator it = s.begin();
 		while (it != s.end()) {
 			if (std::isdigit(*it)) return true;
 			++it;
 		}
 		return false;
+		*/
+		if (s.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßàáâãäå¸æçèéêëìíîïğñòóôõö÷øùüûúışÿ") != std::string::npos)
+		{
+			return true;
+		}
+		else return false;
 	}
 
 	static bool is_number(const std::string& s)

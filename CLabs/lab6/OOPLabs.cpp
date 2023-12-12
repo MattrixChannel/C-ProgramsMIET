@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <vector>
 #include <fstream>
 #include "Student.h"
@@ -175,41 +175,44 @@ int main() {
 				break;
 
 			case '4':
-				std::cout << "Вы хотите найти учителя или студента? (T/S): ";
-				std::cin >> type4;
-				if (type4 != 'T' && type4 != 'S') {
-					throw std::string{ "Неопознанный символ" };
-					break;
-				}
+			{
 				std::cin >> Man4;
 				//std::cout << name4 << "\n";
-				if (type4 == 'T') {
-					for (int i = 0; i < Teachers.size(); i++) {
-						if (Teachers[i] == Man4) {
-							found4 = true;
-							std::cout << "\nНайдена запись: \n" << Teachers[i].ToString() << std::endl;
-							break;
-						}
-					}
-				}
-				if (type4 == 'S') {
-					for (int i = 0; i < Students.size(); i++) {
-						if (Students[i] == Man4) {
-							found4 = true;
-							std::cout << "\nНайдена запись: \n" << Students[i].ToShortString() << std::endl;
-							break;
-						}
+
+				std::vector <Teacher> resultsT;
+				for (int i = 0; i < Teachers.size(); i++) {
+					if (Teachers[i] == Man4) {
+						found4 = true;
+						resultsT.push_back(Teacher());
+						resultsT[resultsT.size() - 1] = Teachers[i];
 					}
 				}
 
-				if (!found4) std::cout << "\nNot found\n";
-
-				break;
-
+				std::vector <Student> resultsS;
+				for (int i = 0; i < Students.size(); i++) {
+					if (Students[i] == Man4) {
+						found4 = true;
+						resultsS.push_back(Student());
+						resultsS[resultsS.size() - 1] = Students[i];
+					}
+				}
+				if (!found4) {
+					std::cout << "\nРезультатов не найдено\n";
+					break;
+				}
+				std::cout << "\nБыли найдены следущие результаты:\n";
+				for (int i = 0; i < resultsS.size(); i++) {
+					std::cout << resultsS[i] << std::endl;
+				}
+				for (int i = 0; i < resultsT.size(); i++) {
+					std::cout << resultsT[i] << std::endl;
+				}
+			}
+			break;
 
 			case '0':
 				//cout << Bank::count;
-
+				
 				return 0;
 			default:
 				throw std::string{ "Неопознанный символ" };

@@ -22,9 +22,9 @@ std::istream& operator>>(std::istream& is, Man& man)
 {
 	std::cout << "Имя: ";
 	is >> man.name;
-	if (Common::has_number(man.name)) throw std::string{ "Обнаружены цифры в слове" };
+	if (Common::has_number(man.name)) throw std::string{ "Обнаружены специальные символы в слове" };
 	std::cout << "Фамилия: ";
 	is >> man.surname;
-	if (Common::has_number(man.surname)) throw std::string{ "Обнаружены цифры в слове" };
+	if (Common::has_number(man.surname)) throw std::string{ "Обнаружены специальные символы в слове" };
 	return is;
 }

@@ -24,6 +24,8 @@ public:
 
 	friend std::istream& operator>> (std::istream& is, Teacher& tech);
 
+	friend std::ostream& operator << (std::ostream& os, Teacher& tech);
+
 	Teacher& operator= (const Teacher& tech) {
 		this->nameSurname = tech.nameSurname;
 		this->course = tech.course;

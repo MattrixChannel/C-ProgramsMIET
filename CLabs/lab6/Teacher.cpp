@@ -66,3 +66,8 @@ std::istream& operator>> (std::istream& is, Teacher& tech)
 	}
 	return is;
 }
+
+std::ostream& operator << (std::ostream& os, Teacher& tech)
+{
+	return os << tech.ToString();
+}

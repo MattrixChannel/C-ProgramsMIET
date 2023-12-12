@@ -45,3 +45,8 @@ std::istream& operator>> (std::istream& is, Student& stud)
     buf = stud.group;
     return is;
 }
+
+std::ostream& operator << (std::ostream& os, Student& stud)
+{
+    return os << stud.ToString();
+}
