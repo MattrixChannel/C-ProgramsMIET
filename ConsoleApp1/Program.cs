@@ -19,86 +19,86 @@ namespace ConsoleApp1
         static void Main()
         {
             //* Testing
-              /*
-            Person a = new Person("Peter", "Brasl", DateTime.Now);
-            Person b = a.DeepCopy() as Person;
-            Console.WriteLine(a.ToString());
-            Console.WriteLine(b.ToString());
-            Console.WriteLine();
-            Console.WriteLine();
-            a.name = "123";
-            Console.WriteLine(a.ToString());
-            Console.WriteLine(b.ToString());
+            /*
+          Person a = new Person("Peter", "Brasl", DateTime.Now);
+          Person b = a.DeepCopy() as Person;
+          Console.WriteLine(a.ToString());
+          Console.WriteLine(b.ToString());
+          Console.WriteLine();
+          Console.WriteLine();
+          a.name = "123";
+          Console.WriteLine(a.ToString());
+          Console.WriteLine(b.ToString());
 
-            Console.WriteLine();
-            Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine();
 
-            Student stud = new Student();
-            Console.WriteLine(stud.ToString());
-            Console.WriteLine();
-            Console.WriteLine();
-            stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
-            stud.education = Education.Specialist;
-            stud.group = 430;
-            Exam[] examss = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
-            List<Exam> exams = new List<Exam>( examss);
-            Test[] testss = { new Test("Art", false) };
-            Console.WriteLine(testss[0].ToString());
-            List<Test> tests = new List<Test>(testss);
-            stud.AddExams(exams);
-            stud.AddTests(tests);
-            Console.WriteLine(stud.ToString());
-            Student a2 = stud.DeepCopy() as Student;
+          Student stud = new Student();
+          Console.WriteLine(stud.ToString());
+          Console.WriteLine();
+          Console.WriteLine();
+          stud.person = new Person("Petr", "Braslavskii", new DateTime(2004, 4, 30));
+          stud.education = Education.Specialist;
+          stud.group = 430;
+          Exam[] examss = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 5, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+          List<Exam> exams = new List<Exam>( examss);
+          Test[] testss = { new Test("Art", false) };
+          Console.WriteLine(testss[0].ToString());
+          List<Test> tests = new List<Test>(testss);
+          stud.AddExams(exams);
+          stud.AddTests(tests);
+          Console.WriteLine(stud.ToString());
+          Student a2 = stud.DeepCopy() as Student;
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine(stud != a2);
+          Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine(stud != a2);
 
-            stud.exam[0].name = "Not IT";
-            stud.name = "Mr Walter";
-            stud.education = Education.Bachelor;
-            stud.birthday = new DateTime(2003, 3, 29);
-            stud.group = 160;
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine(stud.ToString());
-            Console.WriteLine();
-            Console.WriteLine(a2.ToString());
-            Console.WriteLine();
-            Console.WriteLine(stud != a2);
+          stud.exam[0].name = "Not IT";
+          stud.name = "Mr Walter";
+          stud.education = Education.Bachelor;
+          stud.birthday = new DateTime(2003, 3, 29);
+          stud.group = 160;
+          Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine(stud.ToString());
+          Console.WriteLine();
+          Console.WriteLine(a2.ToString());
+          Console.WriteLine();
+          Console.WriteLine(stud != a2);
 
-            Console.WriteLine();
-            Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine();
 
-            Test theTest = new Test();
-            Console.WriteLine(theTest.ToString());
+          Test theTest = new Test();
+          Console.WriteLine(theTest.ToString());
 
-            Console.WriteLine();
-            Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine();
 
-            Console.WriteLine(stud.name + ' ' + stud.person.name);
-            stud.person.name = "123";
-            Console.WriteLine(stud.name + ' ' + stud.person.name);
+          Console.WriteLine(stud.name + ' ' + stud.person.name);
+          stud.person.name = "123";
+          Console.WriteLine(stud.name + ' ' + stud.person.name);
 
-            Console.WriteLine();
-            Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine();
 
-            Console.WriteLine("Все предметы");
-            foreach(object i in stud)
-            {
-                Console.WriteLine(i.ToString());
-            }
+          Console.WriteLine("Все предметы");
+          foreach(object i in stud)
+          {
+              Console.WriteLine(i.ToString());
+          }
 
-            Console.WriteLine();
-            Console.WriteLine();
+          Console.WriteLine();
+          Console.WriteLine();
 
-            Console.WriteLine("Все экзы 4+");
-            foreach (Exam i in stud.GetEnumeratorWithMark(3))
-            {
-                Console.WriteLine(i.ToString());
-            }
-            Console.ReadKey();
-            //*/
+          Console.WriteLine("Все экзы 4+");
+          foreach (Exam i in stud.GetEnumeratorWithMark(3))
+          {
+              Console.WriteLine(i.ToString());
+          }
+          Console.ReadKey();
+          //*/
 
             /* Lab2 Program
             // 1 Создать два объекта типа Person с совпадающими данными и
@@ -319,7 +319,64 @@ namespace ConsoleApp1
             testcoll.Search();
             */
 
+            Journal journal = new Journal();
 
+            Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
+
+            //foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
+            //Array.Sort(exams, Exam.SortDate());
+            //Console.WriteLine();
+            //foreach (var exam in exams) { Console.WriteLine(exam.ToString()); }
+
+            //Exam[] exams = { new Exam("IT", 4, DateTime.Now), new Exam("Math", 1, DateTime.Now), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Now) };
+            Test[] tests = { new Test("Art", false), new Test("PE", true), new Test("IT", false), new Test("Math", true) };
+            StudentCollection<int> coll1 = new StudentCollection<int>((Student student) => student.GetHashCode());
+            coll1.Name = "Collection1";
+            coll1.AddDefaults();
+
+            StudentCollection<int> coll2 = new StudentCollection<int>((Student student) => student.GetHashCode());
+            coll2.Name = "Collection2";
+            coll2.AddDefaults();
+
+
+            //Console.WriteLine("Collection: \n" + coll.ToString());
+
+            Student[] studs = { new Student(), new Student(), new Student() };
+            studs[0].Person = new Person("FirstName", "FirstSurname", new DateTime(2004, 4, 30));
+            studs[0].AddExams(exams);
+            studs[0].AddTests(tests);
+            studs[1].Person = new Person("SecondName", "SecondsSurname", new DateTime(2011, 10, 5));
+            studs[0].Education = Education.Specialist;
+            studs[2].Person = new Person("ThirdName", "ThirSurname", new DateTime(2013, 12, 25));
+            studs[2].Education = Education.Specialist;
+            //Console.WriteLine(studs[0].Person.Name + " " + studs[1].Person.Name);
+
+            coll1.AddStudents(studs[2]);
+            coll2.AddStudents(studs[0]);
+            coll2.AddStudents(studs[1]);
+
+            Console.WriteLine();
+            Console.WriteLine("\n============ Коллекция студентов 1:");
+            Console.WriteLine("Collection: \n" + coll1.ToString());
+
+            Console.WriteLine();
+            Console.WriteLine("\n============ Коллекция студентов 2:");
+            Console.WriteLine("Collection: \n" + coll2.ToString());
+
+            //Console.WriteLine();
+            //Console.WriteLine("Collection 2 ToShortString: \n" + coll.ToShortString());
+            studs[0].Group = 120;
+            studs[1].Education = Education.Specialist;
+
+            coll1.Remove(studs[2]);
+
+            Console.WriteLine(Journal.ToString());
+            Console.WriteLine();
+            Console.WriteLine();
+
+            coll2.Remove(studs[0]);
+
+            Console.WriteLine(Journal.ToString());
             Console.ReadKey();
         }
     }

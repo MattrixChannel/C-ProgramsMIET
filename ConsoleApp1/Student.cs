@@ -11,7 +11,6 @@ using System.Xml.Schema;
 
 namespace ConsoleApp1
 {
-    delegate void StudentsChangedHandler<TKey> (object source, StudentsChangedEventArgs<TKey> args);
 
     internal class Student : Person, IEnumerable, System.ComponentModel.INotifyPropertyChanged
     {
@@ -59,7 +58,12 @@ namespace ConsoleApp1
                 }
             }
         }
-        public Education Education { get { return _education; } set { _education = value; } }
+        public Education Education { get { return _education; } set { _education = value;
+
+                PropertyChanged += Journal.c_NewEntry;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("education"));
+                PropertyChanged -= Journal.c_NewEntry;
+            } }
         public int Group
         {
             get { return _group; }
@@ -74,7 +78,9 @@ namespace ConsoleApp1
                     else
                     {
                         _group = value;
+                        PropertyChanged += Journal.c_NewEntry;
                         PropertyChanged.Invoke(this, new PropertyChangedEventArgs("group"));
+                        PropertyChanged -= Journal.c_NewEntry;
                     }
                 }
                 catch (Exception e)

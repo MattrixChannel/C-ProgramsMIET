@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    delegate void StudentsChangedHandler<TKey>(object source, StudentsChangedEventArgs<TKey> args);
+    delegate void StudentsChangedHandler<TKey>(object source, StudentsChangedEventArgs<string> args);
     delegate TKey KeySelector<TKey>(Student st);
     internal class StudentCollection<TKey>
     {
         public string Name { get; set; }
         private Dictionary<TKey, Student> dict;
-        private KeySelector<TKey> keySelector;
+        public KeySelector<TKey> keySelector;
 
         internal StudentCollection(KeySelector<TKey> keySelector)
         {
@@ -30,6 +30,11 @@ namespace ConsoleApp1
             foreach (Student student in students)
             {
                 dict.Add(keySelector(student), student);
+                
+
+                StudentsChanged += Journal.c_NewEntry;
+                StudentsChanged?.Invoke(this, new StudentsChangedEventArgs<string>(Name, Action.Add, "Student", keySelector(student).ToString()));
+                StudentsChanged -= Journal.c_NewEntry;
             }
         }
 
@@ -70,18 +75,22 @@ namespace ConsoleApp1
             return res;
         }
 
+        public static event StudentsChangedHandler<TKey> StudentsChanged;
+
         public bool Remove(Student st)
         {
             if (dict.Remove(keySelector(st)))
             {
-                StudentsChangedHandler<TKey> studentRemoved = StudentsChanged;
-                studentRemoved?.Invoke(this, new StudentsChangedEventArgs<TKey>("Student", Action.Remove, "Student", keySelector(st)));
+                //StudentsChangedHandler<TKey> studentRemoved = StudentsChanged;
+                StudentsChanged += Journal.c_NewEntry;
+
+                StudentsChanged?.Invoke(this, new StudentsChangedEventArgs<string>(Name, Action.Remove, "Student", keySelector(st).ToString()));
+                StudentsChanged -= Journal.c_NewEntry;
                 return true;
             }
             else { return false; }
         }
 
-        public event StudentsChangedHandler<TKey> StudentsChanged;
     }
     
 

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    internal class Action
+    public enum Action
     {
+        Add,
+        Remove,
+        Property
     }
 }
