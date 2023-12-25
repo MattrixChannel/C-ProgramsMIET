@@ -62,7 +62,7 @@ namespace ConsoleApp1
         override public string ToString()
         {
             string res = string.Empty;
-            foreach (Student student in dict.Values) { res += student.ToString() + "\n"; }
+            foreach (Student student in dict.Values) { res += student.ToString() + "\n\n"; }
             return res;
         }
 

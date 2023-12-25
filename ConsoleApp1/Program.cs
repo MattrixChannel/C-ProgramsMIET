@@ -356,12 +356,12 @@ namespace ConsoleApp1
             coll2.AddStudents(studs[1]);
 
             Console.WriteLine();
-            Console.WriteLine("\n============ Коллекция студентов 1:");
-            Console.WriteLine("Collection: \n" + coll1.ToString());
+            Console.WriteLine("\n============ Коллекция студентов 1:\n");
+            Console.WriteLine(coll1.ToString());
 
             Console.WriteLine();
-            Console.WriteLine("\n============ Коллекция студентов 2:");
-            Console.WriteLine("Collection: \n" + coll2.ToString());
+            Console.WriteLine("\n============ Коллекция студентов 2:\n");
+            Console.WriteLine(coll2.ToString());
 
             //Console.WriteLine();
             //Console.WriteLine("Collection 2 ToShortString: \n" + coll.ToShortString());
@@ -370,12 +370,14 @@ namespace ConsoleApp1
 
             coll1.Remove(studs[2]);
 
+            Console.WriteLine("Journal entries one:\n");
             Console.WriteLine(Journal.ToString());
             Console.WriteLine();
             Console.WriteLine();
 
             coll2.Remove(studs[0]);
 
+            Console.WriteLine("Journal entries two:\n");
             Console.WriteLine(Journal.ToString());
             Console.ReadKey();
         }
