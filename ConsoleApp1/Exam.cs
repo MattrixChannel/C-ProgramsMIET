@@ -9,6 +9,7 @@ using System.Xml.Linq;
 
 namespace ConsoleApp1
 {
+    [Serializable]
     internal class Exam : IComparable, IComparer<Exam>
     {
         public string Name { get; set; }

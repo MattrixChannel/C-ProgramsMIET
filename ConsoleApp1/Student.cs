@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ using System.Xml.Schema;
 
 namespace ConsoleApp1
 {
-
+    [Serializable]
     internal class Student : Person, IEnumerable, System.ComponentModel.INotifyPropertyChanged
     {
         private Education _education;
@@ -27,6 +29,127 @@ namespace ConsoleApp1
             _group = group;
             _exam = new List<Exam>();
             _test = new List<Test>();
+        }
+
+        public Student DeepCopyS() 
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (Student)formatter.Deserialize(stream);
+            }
+        }
+
+        public bool Save(string filename)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(filename, FileMode.Create))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(fileStream, this);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving file: {ex.Message}");
+                return false;
+            }
+        }
+
+        public bool Load(string filename)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(filename, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    Student loadedStudent = (Student)formatter.Deserialize(fileStream);
+                    _group = loadedStudent.Group;
+                    _education = loadedStudent.Education;
+                    _exam = loadedStudent._exam;
+                    _test = loadedStudent._test;
+                    Person = loadedStudent.Person;
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading file: {ex.Message}");
+                return false;
+            }
+        }
+        public bool AddFromConsole()
+        {
+            try
+            {
+                Console.WriteLine("\nEnter exam details (Name, Mark, Exam Date):");
+                string input = Console.ReadLine();
+                string[] values = input.Split(','); // предполагается, что данные вводятся через запятую
+
+                if (values.Length == 3)
+                {
+                    Exam newExam = new Exam
+                    {
+                        Name = values[0].Trim(),
+                        Mark = int.Parse(values[1].Trim()),
+                        Date = DateTime.Parse(values[2].Trim())
+                    };
+
+                    _Exam.Add(newExam);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input format. Please use the correct format.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding exam: {ex.Message}");
+                return false;
+            }
+        }
+        public static bool Save(string filename, Student obj)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(filename, FileMode.Create))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(fileStream, obj);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving file: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static bool Load(string filename, out Student obj)
+        {
+            obj = null;
+
+            try
+            {
+                using (FileStream fileStream = new FileStream(filename, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    obj = (Student)formatter.Deserialize(fileStream);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading file: {ex.Message}");
+                return false;
+            }
         }
 
         internal Student()

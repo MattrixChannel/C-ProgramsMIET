@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -319,6 +321,7 @@ namespace ConsoleApp1
             testcoll.Search();
             */
 
+            /* Lab4 Program
             Journal journal = new Journal();
 
             Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
@@ -379,6 +382,71 @@ namespace ConsoleApp1
 
             Console.WriteLine("Journal entries two:\n");
             Console.WriteLine(Journal.ToString());
+            */
+
+            Exam[] exams = { new Exam("Math", 1, DateTime.Today), new Exam("IT", 4, new DateTime(2023, 1, 1)), new Exam("PE", 5, DateTime.Now), new Exam("Physics", 3, DateTime.Today) };
+            Test[] tests = { new Test("Art", false), new Test("PE", true), new Test("IT", false), new Test("Math", true) };
+
+            Student stud = new Student();
+            stud.Person = new Person("FirstName", "FirstSurname", new DateTime(2004, 4, 30));
+            stud.AddExams(exams);
+            stud.AddTests(tests);
+            string save = "save.txt";
+            stud.Save(save);
+
+
+            Console.WriteLine();
+            Console.WriteLine(stud);
+
+            Student newStud = stud.DeepCopyS();
+
+            Console.WriteLine();
+            Console.WriteLine(newStud);
+
+            Console.WriteLine("\n\nEnter the filename:");
+            string filename = Console.ReadLine();
+
+            Student student = new Student();
+
+            if (!File.Exists(filename))
+            {
+                Console.WriteLine($"File '{filename}' does not exist. Creating a new file.");
+                try
+                {
+                    
+                    using (FileStream fileStream = File.Create(filename))
+                    {
+                        Console.WriteLine($"File '{filename}' created successfully.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error creating file: {ex.Message}");
+                    return;
+                }
+            }
+            else
+            {
+                student.Load(filename);
+                Console.WriteLine($"\nObject loaded from file '{filename}':\n");
+                Console.WriteLine(student);
+            }
+
+            student.AddFromConsole();
+            student.Save(filename);
+
+
+            Console.WriteLine("\nObject after adding new data and saving:\n");
+            Console.WriteLine(student);
+
+            if (Student.Load(filename, out Student staticLoadedStudent))
+            {
+                staticLoadedStudent.AddFromConsole(); 
+                Student.Save(filename, staticLoadedStudent);
+
+                Console.WriteLine("\nObject after static loading, adding new data, and saving:\n");
+                Console.WriteLine(staticLoadedStudent);
+            }
             Console.ReadKey();
         }
     }

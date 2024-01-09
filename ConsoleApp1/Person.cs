@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
+    [Serializable]
     internal class Person : IDateAndCopy
     {
         protected string _name;
